@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Student Management System</h1>
+
+    <h3>Total Students: <span id="count">0</span></h3>
+
+    <h2>Student Registration</h2>
+
+    <form id="studentForm">
+
+        <label>Student Name</label>
+        <input type="text" id="name" placeholder="Enter your name" required>
+
+        <label>Register Number</label>
+        <input type="text" id="regno" placeholder="Enter register number" required>
+
+        <label>Email</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
+
+        <label>Department</label>
+        <select id="department" required>
+            <option value="">Select Department</option>
+            <option value="CSE">CSE</option>
+            <option value="ECE">ECE</option>
+            <option value="EEE">EEE</option>
+            <option value="IT">IT</option>
+            <option value="Mechanical">Mechanical</option>
+        </select>
+
+        <br><br>
+
+        <button type="submit">Register Student</button>
+        <button type="reset">Clear</button>
+
+    </form>
+
+    <hr>
+
+    <h2>Student Details</h2>
+
+    <input type="text" id="search" placeholder="Search Student">
+
+    <table border="1">
+
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Register Number</th>
+                <th>Email</th>
+                <th>Department</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody id="studentList">
+        </tbody>
+
+    </table>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

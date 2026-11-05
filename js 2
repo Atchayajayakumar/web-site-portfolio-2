@@ -1,0 +1,99 @@
+let students = [];
+let editIndex = -1;
+
+studentForm.onsubmit = function(e) {
+    e.preventDefault();
+
+    let student = {
+        name: name.value,
+        regno: regno.value,
+        email: email.value,
+        phone: phone.value,
+        gender: document.querySelector('input[name="gender"]:checked').value,
+        date: date.value,
+        address: address.value,
+        department: department.value,
+        year: year.value
+    };
+
+    let duplicate = students.some((s, i) =>
+        s.email.toLowerCase() === student.email.toLowerCase()
+        && i !== editIndex
+    );
+
+    if (duplicate) {
+        alert("Email already exists!");
+        return;
+    }
+
+    if (editIndex === -1)
+        students.push(student);
+    else {
+        students[editIndex] = student;
+        editIndex = -1;
+    }
+
+    studentForm.reset();
+    display();
+};
+
+
+function display() {
+    studentList.innerHTML = "";
+
+    students.forEach((s, i) => {
+        studentList.innerHTML += `
+        <tr>
+            <td>${s.name}</td>
+            <td>${s.regno}</td>
+            <td>${s.email}</td>
+            <td>${s.department}</td>
+            <td>
+                <button onclick="edit(${i})">Edit</button>
+                <button onclick="remove(${i})">Delete</button>
+            </td>
+        </tr>`;
+    });
+
+    count.innerText = students.length;
+}
+
+
+function edit(i) {
+    let s = students[i];
+
+    name.value = s.name;
+    regno.value = s.regno;
+    email.value = s.email;
+    phone.value = s.phone;
+    date.value = s.date;
+    address.value = s.address;
+    department.value = s.department;
+    year.value = s.year;
+
+    document.querySelector(
+        `input[name="gender"][value="${s.gender}"]`
+    ).checked = true;
+
+    editIndex = i;
+}
+
+
+function remove(i) {
+    if (confirm("Delete student?")) {
+        students.splice(i, 1);
+        display();
+    }
+}
+
+
+search.oninput = function() {
+    let value = search.value.toLowerCase();
+
+    document.querySelectorAll("#studentList tr").forEach(row => {
+        row.style.display =
+            row.cells[0].innerText.toLowerCase().includes(value) ||
+            row.cells[1].innerText.toLowerCase().includes(value)
+            ? "" : "none";
+    });
+};

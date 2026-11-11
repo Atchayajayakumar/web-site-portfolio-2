@@ -1,0 +1,991 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Management System</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f3f4ff;
+    color: #182454;
+}
+
+.sidebar {
+    position: fixed;
+    width: 220px;
+    height: 100vh;
+    background: #101d55;
+    color: white;
+    padding: 20px 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.brand {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.logo {
+    font-size: 45px;
+}
+
+.brand h2 {
+    font-size: 17px;
+    margin-top: 10px;
+}
+
+.brand p {
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.nav a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 13px;
+    border-radius: 8px;
+    margin-bottom: 5px;
+}
+
+.nav a:hover,
+.nav a.active {
+    background: #5426d9;
+}
+
+.logout {
+    margin-top: auto;
+    color: white;
+    text-decoration: none;
+    padding: 12px;
+}
+
+.main {
+    margin-left: 220px;
+}
+
+.topbar {
+    height: 55px;
+    background: white;
+    padding: 15px 20px;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.workspace {
+    padding: 15px;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 18px;
+    box-shadow: 0 5px 15px #00000012;
+    overflow: hidden;
+}
+
+.title {
+    background: linear-gradient(90deg, #27138e, #7138ec);
+    color: white;
+    padding: 13px 18px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.tag {
+    float: right;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.formbody {
+    padding: 18px;
+}
+
+.formgrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px 30px;
+}
+
+.field {
+    min-width: 0;
+}
+
+.field label {
+    display: block;
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.req {
+    color: red;
+}
+
+.control {
+    width: 100%;
+    height: 36px;
+    border: 1px solid #cfd5f1;
+    border-radius: 6px;
+    padding: 8px;
+    outline: none;
+}
+
+.control:focus {
+    border-color: #5426d9;
+}
+
+.control::placeholder {
+    color: #5e6b96;
+}
+
+.gender {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-height: 36px;
+    flex-wrap: wrap;
+}
+
+.gender label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0;
+}
+
+.gender input {
+    accent-color: #5426d9;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.primary {
+    background: #5426d9;
+    color: white;
+}
+
+.light {
+    background: #eeeeff;
+    color: #21166f;
+}
+
+.tablehead {
+    display: flex;
+    align-items: center;
+}
+
+.tablehead .title {
+    flex: 1;
+}
+
+.searchwrap {
+    padding: 10px;
+    width: 320px;
+}
+
+.search {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d3d9f3;
+    border-radius: 7px;
+}
+
+.table-scroll {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    min-width: 1050px;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #e0e3f2;
+    padding: 10px;
+    font-size: 12px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+th {
+    background: #f1f2ff;
+}
+
+tbody tr:hover {
+    background: #fafaff;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.active {
+    background: #c9f5dc;
+    color: green;
+}
+
+.inactive {
+    background: #ffd8dc;
+    color: red;
+}
+
+.actiongroup {
+    display: flex;
+    gap: 6px;
+}
+
+.action {
+    border: none;
+    padding: 7px 10px;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.edit {
+    background: #1681ef;
+}
+
+.del {
+    background: #f04450;
+}
+
+.view {
+    background: #6635df;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    font-size: 12px;
+}
+
+.page {
+    padding: 7px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.mobilecards {
+    display: none;
+}
+
+.toast {
+    position: fixed;
+    top: 62px;
+    right: 18px;
+    z-index: 60;
+    background: #eafff1;
+    border: 1px solid #91dfb2;
+    color: #135b34;
+    padding: 12px 15px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px #0002;
+}
+
+.toast[hidden] {
+    display: none;
+}
+
+.overlay {
+    display: none;
+}
+
+@media(max-width:900px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: .3s;
+        z-index: 30;
+        width: 245px;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main {
+        margin-left: 0;
+    }
+
+    .menu {
+        display: inline-block;
+    }
+
+    .overlay.show {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: #0008;
+        z-index: 25;
+    }
+}
+
+@media(max-width:600px) {
+    .topbar {
+        font-size: 16px;
+    }
+
+    .workspace {
+        padding: 9px;
+    }
+
+    .formgrid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .tag {
+        display: none;
+    }
+
+    .title {
+        font-size: 15px;
+    }
+
+    .actions {
+        display: grid;
+        grid-template-columns: 1fr 100px;
+    }
+
+    .tablehead {
+        display: block;
+    }
+
+    .searchwrap {
+        width: 100%;
+    }
+
+    .table-scroll {
+        display: none;
+    }
+
+    .mobilecards {
+        display: grid;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .student {
+        display: grid;
+        grid-template-columns: 35px 1fr auto;
+        gap: 8px;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        align-items: center;
+    }
+
+    .studentavatar {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background: #eeeaff;
+        display: grid;
+        place-items: center;
+    }
+
+    .studentmain strong,
+    .studentmain small {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 12px;
+        overflow-wrap: anywhere;
+    }
+
+    .studentside {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-end;
+    }
+
+    .action {
+        min-width: 30px;
+        min-height: 30px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+        <div class="logo">🎓</div>
+        <h2>Paavai Engineering College</h2>
+        <p>Student Management System</p>
+    </div>
+
+    <nav class="nav">
+        <a href="#dashboard" class="active">⌂ Dashboard</a>
+        <a href="#registration">♙ Register Student</a>
+        <a href="#students">♟ View Students</a>
+        <a href="#departments">▤ Department</a>
+        <a href="#reports">▣ Reports</a>
+        <a href="#settings">⚙ Settings</a>
+    </nav>
+
+    <a href="#" class="logout" id="logout">⇥ Logout</a>
+
+</aside>
+
+<div class="overlay" id="overlay"></div>
+
+<main class="main" id="dashboard">
+
+    <header class="topbar">
+        <button class="menu" id="menu">☰</button>
+        Student Management System
+    </header>
+
+    <div class="workspace">
+
+        <!-- REGISTRATION FORM -->
+
+        <section class="card" id="registration">
+
+            <div class="title">
+                ♟ Student Registration
+                <span class="tag">Learn · Grow · Achieve</span>
+            </div>
+
+            <div class="formbody">
+
+                <form id="studentForm">
+
+                    <div class="formgrid">
+
+                        <div class="field">
+                            <label>Student Name <span class="req">*</span></label>
+                            <input class="control" id="name"
+                            placeholder="Enter student name" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Department <span class="req">*</span></label>
+                            <select class="control" id="dept" required>
+                                <option value="">Select Department</option>
+                                <option value="CSE">CSE</option>
+                                <option value="ECE">ECE</option>
+                                <option value="IT">IT</option>
+                                <option value="EEE">EEE</option>
+                                <option value="Mechanical">Mechanical</option>
+                                <option value="Civil">Civil</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label>Register Number <span class="req">*</span></label>
+                            <input class="control" id="reg"
+                            placeholder="Enter register number" required>
+                        </div>
+
+                        <div class="field pair">
+                            <div>
+                                <label>Year <span class="req">*</span></label>
+                                <select class="control" id="year" required>
+                                    <option value="">Select Year</option>
+                                    <option>I Year</option>
+                                    <option>II Year</option>
+                                    <option>III Year</option>
+                                    <option>IV Year</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label>Date of Birth <span class="req">*</span></label>
+                                <input class="control" type="date" id="dob" required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>Email <span class="req">*</span></label>
+                            <input class="control" type="email" id="email"
+                            placeholder="Enter email address" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Status <span class="req">*</span></label>
+                            <select class="control" id="status">
+                                <option>Active</option>
+                                <option>Inactive</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label>Phone Number <span class="req">*</span></label>
+                            <input class="control" type="tel" id="phone"
+                            maxlength="10" placeholder="Enter 10 digit number" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Gender <span class="req">*</span></label>
+
+                            <div class="gender">
+                                <label><input type="radio" name="gender" value="Male" required> Male</label>
+                                <label><input type="radio" name="gender" value="Female"> Female</label>
+                                <label><input type="radio" name="gender" value="Others"> Others</label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="actions">
+                        <button class="btn primary" id="submit" type="submit">
+                            Register Student
+                        </button>
+
+                        <button class="btn light" type="reset">
+                            Clear
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </section>
+
+        <!-- STUDENT DETAILS -->
+
+        <section class="card" id="students">
+
+            <div class="tablehead">
+
+                <div class="title">
+                    ♟ Student Details
+                </div>
+
+                <div class="searchwrap">
+                    <input class="search" id="search"
+                    placeholder="Search by Name or Register Number...">
+                </div>
+
+            </div>
+
+            <div class="table-scroll">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Name</th>
+                            <th>Register Number</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Gender</th>
+                            <th>Department</th>
+                            <th>Year</th>
+                            <th>DOB</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tableBody"></tbody>
+
+                </table>
+
+            </div>
+
+            <div class="mobilecards" id="mobileCards"></div>
+
+            <div class="footer">
+                <span id="count"></span>
+
+                <div>
+                    <button class="page" id="prev">❮</button>
+                    <span id="page">1</span>
+                    <button class="page" id="next">❯</button>
+                </div>
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+<div class="toast" id="toast" hidden>
+    <span id="toastText"></span>
+    <button id="toastClose">×</button>
+</div>
+
+<script>
+
+// GET ELEMENT BY ID
+
+const $ = id => document.getElementById(id);
+
+
+// SAMPLE STUDENT DATA
+
+let students = JSON.parse(localStorage.getItem("paavaiStudents")) || [
+
+    {
+        name: "Atchaya J",
+        reg: "2026EC102",
+        email: "atchaya@gmail.com",
+        phone: "9876543210",
+        gender: "Female",
+        dept: "ECE",
+        year: "IV Year",
+        dob: "2004-06-15",
+        status: "Active"
+    },
+
+    {
+        name: "Dhivya S",
+        reg: "2026EC103",
+        email: "dhivya@gmail.com",
+        phone: "8765432109",
+        gender: "Female",
+        dept: "ECE",
+        year: "IV Year",
+        dob: "2004-07-22",
+        status: "Active"
+    },
+
+    {
+        name: "Ramesh M",
+        reg: "2026CS101",
+        email: "ramesh@gmail.com",
+        phone: "9123456780",
+        gender: "Male",
+        dept: "CSE",
+        year: "IV Year",
+        dob: "2004-08-10",
+        status: "Inactive"
+    },
+
+    {
+        name: "Sneha R",
+        reg: "2026IT101",
+        email: "sneha@gmail.com",
+        phone: "9345678901",
+        gender: "Female",
+        dept: "IT",
+        year: "IV Year",
+        dob: "2004-09-28",
+        status: "Active"
+    }
+
+];
+
+let editIndex = -1;
+let pageNo = 1;
+const pageSize = 5;
+
+
+// SAVE DATA
+
+function save() {
+    localStorage.setItem("paavaiStudents", JSON.stringify(students));
+}
+
+
+// ESCAPE HTML
+
+function esc(value) {
+    return String(value ?? "").replace(/[&<>"']/g, c => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    }[c]));
+}
+
+
+// DATE FORMAT
+
+function dateFmt(date) {
+    if (!date) return "";
+
+    let a = date.split("-");
+
+    return `${a[2]}-${a[1]}-${a[0]}`;
+}
+
+
+// SEARCH
+
+function results() {
+
+    let q = $("search").value.toLowerCase().trim();
+
+    return students.map((s, i) => ({
+        ...s,
+        _i: i
+    })).filter(s =>
+        s.name.toLowerCase().includes(q) ||
+        s.reg.toLowerCase().includes(q)
+    );
+
+}
+
+
+// ACTION BUTTONS
+
+function buttons(i) {
+
+    return `
+        <div class="actiongroup">
+
+            <button class="action edit"
+            data-act="edit" data-i="${i}">✎</button>
+
+            <button class="action del"
+            data-act="delete" data-i="${i}">🗑</button>
+
+            <button class="action view"
+            data-act="view" data-i="${i}">◉</button>
+
+        </div>
+    `;
+}
+
+
+// DISPLAY STUDENT DATA
+
+function render() {
+
+    let data = results();
+
+    let pages = Math.max(1, Math.ceil(data.length / pageSize));
+
+    pageNo = Math.min(pageNo, pages);
+
+    let start = (pageNo - 1) * pageSize;
+
+    let part = data.slice(start, start + pageSize);
+
+
+    $("tableBody").innerHTML = part.length
+
+        ? part.map((s, n) => `
+
+            <tr>
+                <td>${start + n + 1}</td>
+                <td>${esc(s.name)}</td>
+                <td>${esc(s.reg)}</td>
+                <td>${esc(s.email)}</td>
+                <td>${esc(s.phone)}</td>
+                <td>${esc(s.gender)}</td>
+                <td>${esc(s.dept)}</td>
+                <td>${esc(s.year)}</td>
+                <td>${dateFmt(s.dob)}</td>
+
+                <td>
+                    <span class="status ${s.status === "Active" ? "active" : "inactive"}">
+                        ${esc(s.status)}
+                    </span>
+                </td>
+
+                <td>${buttons(s._i)}</td>
+            </tr>
+
+        `).join("")
+
+        : `<tr><td colspan="11">No student records found.</td></tr>`;
+
+
+    // MOBILE CARDS
+
+    $("mobileCards").innerHTML = part.length
+
+        ? part.map(s => `
+
+            <article class="student">
+
+                <div class="studentavatar">
+                    ${esc(s.name[0].toUpperCase())}
+                </div>
+
+                <div class="studentmain">
+                    <strong>${esc(s.name)}</strong>
+                    <small>${esc(s.reg)}</small>
+                    <small>${esc(s.email)}</small>
+                </div>
+
+                <div class="studentside">
+
+                    <span class="status ${s.status === "Active" ? "active" : "inactive"}">
+                        ${esc(s.status)}
+                    </span>
+
+                    ${buttons(s._i)}
+
+                </div>
+
+            </article>
+
+        `).join("")
+
+        : "<p>No student records found.</p>";
+
+
+    $("count").textContent = data.length
+        ? `Showing ${start + 1} to ${Math.min(start + pageSize, data.length)} of ${data.length} students`
+        : "Showing 0 students";
+
+    $("page").textContent = pageNo;
+
+    $("prev").disabled = pageNo === 1;
+    $("next").disabled = pageNo === pages;
+
+}
+
+
+// TOAST MESSAGE
+
+let toastTimer;
+
+function toast(message) {
+
+    $("toastText").textContent = message;
+
+    $("toast").hidden = false;
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(() => {
+        $("toast").hidden = true;
+    }, 3000);
+
+}
+
+$("toastClose").onclick = () => {
+    $("toast").hidden = true;
+};
+
+
+// GET FORM DATA
+
+function formData() {
+
+    let gender = document.querySelector(
+        'input[name="gender"]:checked'
+    );
+
+    return {
+
+        name: $("name").value.trim(),
+        reg: $("reg").value.trim(),
+        email: $("email").value.trim(),
+        phone: $("phone").value.trim(),
+        gender: gender ? gender.value : "",
+        dept: $("dept").value,
+        year: $("year").value,
+        dob: $("dob").value,
+        status: $("status").value
+
+    };
+
+}
+
+
+// REGISTER / UPDATE STUDENT
+
+$("studentForm").addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    let data = formData();
+
+
+    if (!/^\d{10}$/.test(data.phone)) {
+        toast("Enter a valid 10 digit phone number.");
+        return;
+    }
+
+
+    if (data.dob > new Date().toISOString().slice(0, 10)) {
+        toast("Date of birth cannot be in the future.");
+        return;
+    }
+
+
+    let duplicate = students.some((s, i) =>
+
+        i !== editIndex && (
+
+            s.reg.toLowerCase() === data.reg.toLowerCase() ||
+            s.email.toLowerCase() === data.email.toLowerCase()
+
+        )
+
+    );
+
+
+    if (duplicate) {
+        toast("Register number or Email already exists.");
+        return;
+    }
+
+
+    if (editIndex === -1) {
+
+        students.unshift(data);
+
+        toast("Student Registered Successfully!");
+
+    } else {
+
+        students[editIndex] = data;
+
+        toast("Student Details Updated Successfully!");
+
+    }
+
+
+    save();
+
+    editIndex = -1;
+
+    $("studentForm").reset();
+
+    $("submit").textContent = "Register Student";
+
+    pageNo = 1;
+
+    rende

@@ -1,0 +1,179 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #dbeafe, #ede9fe, #fce7f3);
+    padding: 30px 15px;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1150px;
+    margin: auto;
+}
+
+header {
+    background: linear-gradient(120deg, #4338ca, #7c3aed);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    margin-bottom: 8px;
+}
+
+.count-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    width: 220px;
+    margin-bottom: 20px;
+    border-left: 5px solid #7c3aed;
+    color: #4338ca;
+}
+
+.form-card, .table-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+}
+
+h2 {
+    color: #4338ca;
+    margin-bottom: 20px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.form-row > label {
+    font-weight: bold;
+    color: #374151;
+}
+
+input:not([type="radio"]), select, textarea {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    background: #f8fafc;
+}
+
+textarea {
+    height: 70px;
+    resize: vertical;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #7c3aed;
+}
+
+.gender-options {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.gender-options label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.buttons {
+    margin-left: 195px;
+}
+
+button {
+    background: #6d4be8;
+    color: white;
+    border: none;
+    padding: 11px 18px;
+    border-radius: 7px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+button:hover {
+    background: #4338ca;
+}
+
+.clear-btn {
+    background: #64748b;
+}
+
+#search {
+    max-width: 400px;
+    margin-bottom: 20px;
+}
+
+.table-scroll {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 850px;
+}
+
+th {
+    background: #5145cd;
+    color: white;
+    padding: 13px;
+}
+
+td {
+    padding: 11px;
+    text-align: center;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+tr:nth-child(even) {
+    background: #f5f3ff;
+}
+
+td img {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 12px 8px;
+    }
+
+    .form-card, .table-card {
+        padding: 15px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 7px;
+    }
+
+    .buttons {
+        margin-left: 0;
+    }
+
+    .gender-options {
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+}

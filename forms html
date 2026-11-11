@@ -1,0 +1,193 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+    <div class="brand">
+        <div class="logo">🎓</div>
+        <h2>Paavai Engineering College</h2>
+        <p>Student Management System</p>
+    </div>
+
+    <nav class="nav">
+        <a href="#dashboard" class="active">⌂ Dashboard</a>
+        <a href="#registration">♙ Register Student</a>
+        <a href="#students">♟ View Students</a>
+        <a href="#departments">▤ Department</a>
+        <a href="#reports">▣ Reports</a>
+        <a href="#settings">⚙ Settings</a>
+    </nav>
+
+    <a href="#" class="logout" id="logout">⇥ Logout</a>
+</aside>
+
+<div class="overlay" id="overlay"></div>
+
+<main class="main" id="dashboard">
+
+    <header class="topbar">
+        <button id="menu">☰</button>
+        Student Management System
+    </header>
+
+    <div class="workspace">
+
+        <section class="card" id="registration">
+
+            <div class="title">
+                ♟ Student Registration
+                <span class="tag">Learn · Grow · Achieve</span>
+            </div>
+
+            <div class="formbody">
+                <form id="studentForm">
+
+                    <div class="formgrid">
+
+                        <div class="field">
+                            <label>Student Name *</label>
+                            <input class="control" id="name"
+                            placeholder="Enter student name" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Department *</label>
+                            <select class="control" id="dept" required>
+                                <option value="">Select Department</option>
+                                <option>CSE</option>
+                                <option>ECE</option>
+                                <option>IT</option>
+                                <option>EEE</option>
+                                <option>Mechanical</option>
+                                <option>Civil</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label>Register Number *</label>
+                            <input class="control" id="reg"
+                            placeholder="Enter register number" required>
+                        </div>
+
+                        <div class="field pair">
+                            <div>
+                                <label>Year *</label>
+                                <select class="control" id="year" required>
+                                    <option value="">Select Year</option>
+                                    <option>I Year</option>
+                                    <option>II Year</option>
+                                    <option>III Year</option>
+                                    <option>IV Year</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label>Date of Birth *</label>
+                                <input class="control" type="date" id="dob" required>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>Email *</label>
+                            <input class="control" type="email" id="email"
+                            placeholder="Enter email address" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Status *</label>
+                            <select class="control" id="status">
+                                <option>Active</option>
+                                <option>Inactive</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label>Phone Number *</label>
+                            <input class="control" type="tel" id="phone"
+                            maxlength="10" placeholder="Enter 10 digit number" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Gender *</label>
+                            <div class="gender">
+                                <label><input type="radio" name="gender" value="Male" required> Male</label>
+                                <label><input type="radio" name="gender" value="Female"> Female</label>
+                                <label><input type="radio" name="gender" value="Others"> Others</label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="actions">
+                        <button class="btn primary" id="submit" type="submit">
+                            Register Student
+                        </button>
+                        <button class="btn light" type="reset">Clear</button>
+                    </div>
+
+                </form>
+            </div>
+        </section>
+
+        <section class="card" id="students">
+
+            <div class="tablehead">
+                <div class="title">♟ Student Details</div>
+                <div class="searchwrap">
+                    <input class="search" id="search"
+                    placeholder="Search by Name or Register Number...">
+                </div>
+            </div>
+
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Name</th>
+                            <th>Register Number</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Gender</th>
+                            <th>Department</th>
+                            <th>Year</th>
+                            <th>DOB</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+
+            <div class="mobilecards" id="mobileCards"></div>
+
+            <div class="footer">
+                <span id="count"></span>
+                <div>
+                    <button class="page" id="prev">❮</button>
+                    <span id="page">1</span>
+                    <button class="page" id="next">❯</button>
+                </div>
+            </div>
+
+        </section>
+
+    </div>
+</main>
+
+<div class="toast" id="toast" hidden>
+    <span id="toastText"></span>
+    <button id="toastClose">×</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

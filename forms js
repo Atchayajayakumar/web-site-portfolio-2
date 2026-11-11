@@ -1,0 +1,427 @@
+
+const $ = id => document.getElementById(id);
+
+let students = JSON.parse(localStorage.getItem("paavaiStudents")) || [
+    {
+        name: "Atchaya J",
+        reg: "2026EC102",
+        email: "atchaya@gmail.com",
+        phone: "9876543210",
+        gender: "Female",
+        dept: "ECE",
+        year: "IV Year",
+        dob: "2004-06-15",
+        status: "Active"
+    },
+    {
+        name: "Dhivya S",
+        reg: "2026EC103",
+        email: "dhivya@gmail.com",
+        phone: "8765432109",
+        gender: "Female",
+        dept: "ECE",
+        year: "IV Year",
+        dob: "2004-07-22",
+        status: "Active"
+    },
+    {
+        name: "Ramesh M",
+        reg: "2026CS101",
+        email: "ramesh@gmail.com",
+        phone: "9123456780",
+        gender: "Male",
+        dept: "CSE",
+        year: "IV Year",
+        dob: "2004-08-10",
+        status: "Inactive"
+    },
+    {
+        name: "Sneha R",
+        reg: "2026IT101",
+        email: "sneha@gmail.com",
+        phone: "9345678901",
+        gender: "Female",
+        dept: "IT",
+        year: "IV Year",
+        dob: "2004-09-28",
+        status: "Active"
+    }
+];
+
+let editIndex = -1;
+let pageNo = 1;
+const pageSize = 5;
+
+
+// SAVE DATA
+
+function save() {
+    localStorage.setItem("paavaiStudents", JSON.stringify(students));
+}
+
+
+// ESCAPE HTML
+
+function esc(value) {
+    return String(value ?? "").replace(/[&<>"']/g, c => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    }[c]));
+}
+
+
+// DATE FORMAT
+
+function dateFmt(date) {
+    if (!date) return "";
+
+    let a = date.split("-");
+
+    return `${a[2]}-${a[1]}-${a[0]}`;
+}
+
+
+// SEARCH
+
+function results() {
+    let q = $("search").value.toLowerCase().trim();
+
+    return students.map((s, i) => ({
+        ...s,
+        _i: i
+    })).filter(s =>
+        s.name.toLowerCase().includes(q) ||
+        s.reg.toLowerCase().includes(q)
+    );
+}
+
+
+// ACTION BUTTONS
+
+function buttons(i) {
+    return `
+        <div class="actiongroup">
+            <button class="action edit" data-act="edit" data-i="${i}">✎</button>
+            <button class="action del" data-act="delete" data-i="${i}">🗑</button>
+            <button class="action view" data-act="view" data-i="${i}">◉</button>
+        </div>
+    `;
+}
+
+
+// DISPLAY STUDENTS
+
+function render() {
+    let data = results();
+
+    let pages = Math.max(1, Math.ceil(data.length / pageSize));
+
+    pageNo = Math.min(pageNo, pages);
+
+    let start = (pageNo - 1) * pageSize;
+
+    let part = data.slice(start, start + pageSize);
+
+    $("tableBody").innerHTML = part.length
+        ? part.map((s, n) => `
+            <tr>
+                <td>${start + n + 1}</td>
+                <td>${esc(s.name)}</td>
+                <td>${esc(s.reg)}</td>
+                <td>${esc(s.email)}</td>
+                <td>${esc(s.phone)}</td>
+                <td>${esc(s.gender)}</td>
+                <td>${esc(s.dept)}</td>
+                <td>${esc(s.year)}</td>
+                <td>${dateFmt(s.dob)}</td>
+                <td>
+                    <span class="status ${s.status === "Active" ? "active" : "inactive"}">
+                        ${esc(s.status)}
+                    </span>
+                </td>
+                <td>${buttons(s._i)}</td>
+            </tr>
+        `).join("")
+        : `<tr><td colspan="11">No student records found.</td></tr>`;
+
+    $("mobileCards").innerHTML = part.length
+        ? part.map(s => `
+            <article class="student">
+                <div class="studentavatar">
+                    ${esc(s.name[0].toUpperCase())}
+                </div>
+                <div class="studentmain">
+                    <strong>${esc(s.name)}</strong>
+                    <small>${esc(s.reg)}</small>
+                    <small>${esc(s.email)}</small>
+                </div>
+                <div class="studentside">
+                    <span class="status ${s.status === "Active" ? "active" : "inactive"}">
+                        ${esc(s.status)}
+                    </span>
+                    ${buttons(s._i)}
+                </div>
+            </article>
+        `).join("")
+        : "<p>No student records found.</p>";
+
+    $("count").textContent = data.length
+        ? `Showing ${start + 1} to ${Math.min(start + pageSize, data.length)} of ${data.length} students`
+        : "Showing 0 students";
+
+    $("page").textContent = pageNo;
+
+    $("prev").disabled = pageNo === 1;
+    $("next").disabled = pageNo === pages;
+}
+
+
+// TOAST MESSAGE
+
+let toastTimer;
+
+function toast(message) {
+    $("toastText").textContent = message;
+    $("toast").hidden = false;
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(() => {
+        $("toast").hidden = true;
+    }, 3000);
+}
+
+$("toastClose").onclick = () => {
+    $("toast").hidden = true;
+};
+
+
+// GET FORM DATA
+
+function formData() {
+    let gender = document.querySelector(
+        'input[name="gender"]:checked'
+    );
+
+    return {
+        name: $("name").value.trim(),
+        reg: $("reg").value.trim(),
+        email: $("email").value.trim(),
+        phone: $("phone").value.trim(),
+        gender: gender ? gender.value : "",
+        dept: $("dept").value,
+        year: $("year").value,
+        dob: $("dob").value,
+        status: $("status").value
+    };
+}
+
+
+// REGISTER / UPDATE
+
+$("studentForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    let data = formData();
+
+    if (!/^\d{10}$/.test(data.phone)) {
+        toast("Enter a valid 10 digit phone number.");
+        return;
+    }
+
+    if (data.dob > new Date().toISOString().slice(0, 10)) {
+        toast("Date of birth cannot be in the future.");
+        return;
+    }
+
+    let duplicate = students.some((s, i) =>
+        i !== editIndex && (
+            s.reg.toLowerCase() === data.reg.toLowerCase() ||
+            s.email.toLowerCase() === data.email.toLowerCase()
+        )
+    );
+
+    if (duplicate) {
+        toast("Register number or Email already exists.");
+        return;
+    }
+
+    if (editIndex === -1) {
+        students.unshift(data);
+        toast("Student Registered Successfully!");
+    } else {
+        students[editIndex] = data;
+        toast("Student Details Updated Successfully!");
+    }
+
+    save();
+
+    editIndex = -1;
+
+    $("studentForm").reset();
+
+    $("submit").textContent = "Register Student";
+
+    pageNo = 1;
+
+    render();
+});
+
+
+// CLEAR FORM
+
+$("studentForm").addEventListener("reset", function() {
+    editIndex = -1;
+    $("submit").textContent = "Register Student";
+});
+
+
+// EDIT STUDENT
+
+function editStudent(i) {
+    let s = students[i];
+
+    $("name").value = s.name;
+    $("reg").value = s.reg;
+    $("email").value = s.email;
+    $("phone").value = s.phone;
+    $("dept").value = s.dept;
+    $("year").value = s.year;
+    $("dob").value = s.dob;
+    $("status").value = s.status;
+
+    let radio = document.querySelector(
+        `input[name="gender"][value="${s.gender}"]`
+    );
+
+    if (radio) radio.checked = true;
+
+    editIndex = i;
+
+    $("submit").textContent = "Update Student";
+
+    $("registration").scrollIntoView({
+        behavior: "smooth"
+    });
+}
+
+
+// DELETE STUDENT
+
+function deleteStudent(i) {
+    if (confirm(`Delete ${students[i].name}'s record?`)) {
+        students.splice(i, 1);
+        save();
+        render();
+        toast("Student record deleted.");
+    }
+}
+
+
+// VIEW STUDENT
+
+function viewStudent(i) {
+    let s = students[i];
+
+    alert(
+        "Student Details\n\n" +
+        "Name: " + s.name + "\n" +
+        "Register No: " + s.reg + "\n" +
+        "Email: " + s.email + "\n" +
+        "Phone: " + s.phone + "\n" +
+        "Gender: " + s.gender + "\n" +
+        "Department: " + s.dept + "\n" +
+        "Year: " + s.year + "\n" +
+        "DOB: " + dateFmt(s.dob) + "\n" +
+        "Status: " + s.status
+    );
+}
+
+
+// ACTION EVENTS
+
+function actions(e) {
+    let button = e.target.closest("button[data-act]");
+
+    if (!button) return;
+
+    let i = Number(button.dataset.i);
+
+    if (button.dataset.act === "edit") {
+        editStudent(i);
+    }
+
+    if (button.dataset.act === "delete") {
+        deleteStudent(i);
+    }
+
+    if (button.dataset.act === "view") {
+        viewStudent(i);
+    }
+}
+
+$("tableBody").addEventListener("click", actions);
+$("mobileCards").addEventListener("click", actions);
+
+
+// SEARCH EVENT
+
+$("search").addEventListener("input", function() {
+    pageNo = 1;
+    render();
+});
+
+
+// PAGINATION
+
+$("prev").onclick = function() {
+    if (pageNo > 1) {
+        pageNo--;
+        render();
+    }
+};
+
+$("next").onclick = function() {
+    if (pageNo < Math.ceil(results().length / pageSize)) {
+        pageNo++;
+        render();
+    }
+};
+
+
+// MOBILE SIDEBAR
+
+const sidebar = $("sidebar");
+const overlay = $("overlay");
+
+function closeMenu() {
+    sidebar.classList.remove("open");
+    overlay.classList.remove("show");
+}
+
+$("menu").onclick = function() {
+    sidebar.classList.toggle("open");
+    overlay.classList.toggle("show");
+};
+
+overlay.onclick = closeMenu;
+
+
+// LOGOUT
+
+$("logout").onclick = function(e) {
+    e.preventDefault();
+
+    if (confirm("Do you want to logout?")) {
+        toast("Logged out (demo).");
+    }
+};
+
+
+// INITIAL DISPLAY
+
+save();
+render();

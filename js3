@@ -1,0 +1,165 @@
+let students = [];
+let editIndex = -1;
+
+const form = document.getElementById("studentForm");
+const email = document.getElementById("email");
+const search = document.getElementById("search");
+
+
+// Duplicate Email Check
+email.addEventListener("change", function() {
+    let value = email.value.toLowerCase();
+
+    let duplicate = students.some((s, i) =>
+        s.email.toLowerCase() === value && i !== editIndex
+    );
+
+    if (duplicate) {
+        alert("Email already exists!");
+        email.value = "";
+        email.focus();
+    }
+});
+
+
+// Register Student
+form.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    let gender = document.querySelector('input[name="gender"]:checked');
+
+    let student = {
+        name: document.getElementById("name").value,
+        regno: document.getElementById("regno").value,
+        email: email.value,
+        phone: document.getElementById("phone").value,
+        gender: gender.value,
+        date: document.getElementById("date").value,
+        address: document.getElementById("address").value,
+        department: document.getElementById("department").value,
+        year: document.getElementById("year").value,
+        photo: editIndex >= 0 ? students[editIndex].photo : ""
+    };
+
+    let duplicate = students.some((s, i) =>
+        s.email.toLowerCase() === student.email.toLowerCase()
+        && i !== editIndex
+    );
+
+    if (duplicate) {
+        alert("Email already exists!");
+        return;
+    }
+
+    let file = document.getElementById("photo").files[0];
+
+    function save() {
+        if (editIndex === -1) {
+            students.push(student);
+            alert("Student Registered Successfully!");
+        } else {
+            students[editIndex] = student;
+            alert("Student Updated Successfully!");
+            editIndex = -1;
+        }
+
+        form.reset();
+        document.getElementById("submitBtn").innerText = "Register Student";
+        display();
+    }
+
+    if (file) {
+        let reader = new FileReader();
+        reader.onload = function() {
+            student.photo = reader.result;
+            save();
+        };
+        reader.readAsDataURL(file);
+    } else {
+        save();
+    }
+});
+
+
+// Display Students
+function display() {
+    let list = document.getElementById("studentList");
+    list.innerHTML = "";
+
+    students.forEach((s, i) => {
+        list.innerHTML += `
+        <tr>
+            <td>${s.name}</td>
+            <td>${s.regno}</td>
+            <td>${s.email}</td>
+            <td>${s.phone}</td>
+            <td>${s.gender}</td>
+            <td>${s.date}</td>
+            <td>${s.address}</td>
+            <td>${s.department}</td>
+            <td>${s.year}</td>
+            <td>${s.photo ? `<img src="${s.photo}">` : "No Photo"}</td>
+            <td>
+                <button onclick="editStudent(${i})">Edit</button>
+                <button onclick="deleteStudent(${i})">Delete</button>
+            </td>
+        </tr>`;
+    });
+
+    document.getElementById("count").innerText = students.length;
+    searchStudents();
+}
+
+
+// Edit Student
+function editStudent(i) {
+    let s = students[i];
+
+    document.getElementById("name").value = s.name;
+    document.getElementById("regno").value = s.regno;
+    email.value = s.email;
+    document.getElementById("phone").value = s.phone;
+    document.getElementById("date").value = s.date;
+    document.getElementById("address").value = s.address;
+    document.getElementById("department").value = s.department;
+    document.getElementById("year").value = s.year;
+
+    document.querySelector(
+        `input[name="gender"][value="${s.gender}"]`
+    ).checked = true;
+
+    editIndex = i;
+    document.getElementById("submitBtn").innerText = "Update Student";
+}
+
+
+// Delete Student
+function deleteStudent(i) {
+    if (confirm("Do you want to delete this student?")) {
+        students.splice(i, 1);
+        display();
+    }
+}
+
+
+// Search by Name or Register Number
+search.addEventListener("input", searchStudents);
+
+function searchStudents() {
+    let value = search.value.toLowerCase();
+
+    document.querySelectorAll("#studentList tr").forEach(row => {
+        let name = row.cells[0].innerText.toLowerCase();
+        let regno = row.cells[1].innerText.toLowerCase();
+
+        row.style.display =
+            name.includes(value) || regno.includes(value) ? "" : "none";
+    });
+}
+
+
+// Clear Form
+form.addEventListener("reset", function() {
+    editIndex = -1;
+    document.getElementById("submitBtn").innerText = "Register Student";
+});

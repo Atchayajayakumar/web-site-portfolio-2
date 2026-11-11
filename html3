@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>Student Management System</h1>
+        <p>Manage student records easily</p>
+    </header>
+
+    <div class="count-card">
+        <h3>Total Students</h3>
+        <h1 id="count">0</h1>
+    </div>
+
+    <section class="form-card">
+        <h2>Student Registration</h2>
+
+        <form id="studentForm">
+
+            <div class="form-row">
+                <label>Student Name</label>
+                <input type="text" id="name" placeholder="Enter student name" required>
+            </div>
+
+            <div class="form-row">
+                <label>Register Number</label>
+                <input type="text" id="regno" placeholder="Enter register number" required>
+            </div>
+
+            <div class="form-row">
+                <label>Email</label>
+                <input type="email" id="email" placeholder="Enter email" required>
+            </div>
+
+            <div class="form-row">
+                <label>Phone Number</label>
+                <input type="tel" id="phone" placeholder="10 digit number"
+                       pattern="[0-9]{10}" maxlength="10" required>
+            </div>
+
+            <div class="form-row">
+                <label>Gender</label>
+                <div class="gender-options">
+                    <label><input type="radio" name="gender" value="Male" required> Male</label>
+                    <label><input type="radio" name="gender" value="Female"> Female</label>
+                    <label><input type="radio" name="gender" value="Others"> Others</label>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label>Date</label>
+                <input type="date" id="date" required>
+            </div>
+
+            <div class="form-row">
+                <label>Address</label>
+                <textarea id="address" placeholder="Enter address" required></textarea>
+            </div>
+
+            <div class="form-row">
+                <label>Department</label>
+                <select id="department" required>
+                    <option value="">Select Department</option>
+                    <option>CSE</option>
+                    <option>ECE</option>
+                    <option>EEE</option>
+                    <option>IT</option>
+                    <option>Mechanical</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Year</label>
+                <select id="year" required>
+                    <option value="">Select Year</option>
+                    <option>1st Year</option>
+                    <option>2nd Year</option>
+                    <option>3rd Year</option>
+                    <option>4th Year</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Student Photo</label>
+                <input type="file" id="photo" accept="image/*">
+            </div>
+
+            <div class="buttons">
+                <button type="submit" id="submitBtn">Register Student</button>
+                <button type="reset" class="clear-btn">Clear</button>
+            </div>
+
+        </form>
+    </section>
+
+    <section class="table-card">
+        <h2>Student Details</h2>
+
+        <input type="text" id="search"
+               placeholder="Search by Name or Register Number">
+
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Register No</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Gender</th>
+                        <th>Date</th>
+                        <th>Address</th>
+                        <th>Department</th>
+                        <th>Year</th>
+                        <th>Photo</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="studentList"></tbody>
+            </table>
+        </div>
+    </section>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

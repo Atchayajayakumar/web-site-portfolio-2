@@ -1,0 +1,447 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f3f4ff;
+    color: #182454;
+}
+
+.sidebar {
+    position: fixed;
+    width: 220px;
+    height: 100vh;
+    background: #101d55;
+    color: white;
+    padding: 20px 12px;
+    display: flex;
+    flex-direction: column;
+    z-index: 30;
+}
+
+.brand {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.logo {
+    font-size: 45px;
+}
+
+.brand h2 {
+    font-size: 17px;
+    margin-top: 10px;
+}
+
+.brand p {
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.nav a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 13px;
+    border-radius: 8px;
+    margin-bottom: 5px;
+}
+
+.nav a:hover,
+.nav a.active {
+    background: #5426d9;
+}
+
+.logout {
+    margin-top: auto;
+    color: white;
+    text-decoration: none;
+    padding: 12px;
+}
+
+.main {
+    margin-left: 220px;
+}
+
+.topbar {
+    height: 55px;
+    background: white;
+    padding: 15px 20px;
+    font-size: 21px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#menu {
+    border: none;
+    background: none;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.workspace {
+    padding: 15px;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 18px;
+    box-shadow: 0 5px 15px #00000012;
+    overflow: hidden;
+}
+
+.title {
+    background: linear-gradient(90deg, #27138e, #7138ec);
+    color: white;
+    padding: 13px 18px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.tag {
+    float: right;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.formbody {
+    padding: 18px;
+}
+
+.formgrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px 30px;
+}
+
+.field {
+    min-width: 0;
+}
+
+.field label {
+    display: block;
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.control {
+    width: 100%;
+    height: 36px;
+    border: 1px solid #cfd5f1;
+    border-radius: 6px;
+    padding: 8px;
+    outline: none;
+}
+
+.control:focus {
+    border-color: #5426d9;
+}
+
+.control::placeholder {
+    color: #5e6b96;
+}
+
+.gender {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-height: 36px;
+    flex-wrap: wrap;
+}
+
+.gender label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0;
+}
+
+.gender input {
+    accent-color: #5426d9;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.primary {
+    background: #5426d9;
+    color: white;
+}
+
+.light {
+    background: #eeeeff;
+    color: #21166f;
+}
+
+.tablehead {
+    display: flex;
+    align-items: center;
+}
+
+.tablehead .title {
+    flex: 1;
+}
+
+.searchwrap {
+    padding: 10px;
+    width: 320px;
+}
+
+.search {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #d3d9f3;
+    border-radius: 7px;
+}
+
+.table-scroll {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    min-width: 1050px;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #e0e3f2;
+    padding: 10px;
+    font-size: 12px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+th {
+    background: #f1f2ff;
+}
+
+tbody tr:hover {
+    background: #fafaff;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.active {
+    background: #c9f5dc;
+    color: green;
+}
+
+.inactive {
+    background: #ffd8dc;
+    color: red;
+}
+
+.actiongroup {
+    display: flex;
+    gap: 6px;
+}
+
+.action {
+    border: none;
+    padding: 7px 10px;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.edit {
+    background: #1681ef;
+}
+
+.del {
+    background: #f04450;
+}
+
+.view {
+    background: #6635df;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    font-size: 12px;
+}
+
+.page {
+    padding: 7px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.page:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.mobilecards {
+    display: none;
+}
+
+.toast {
+    position: fixed;
+    top: 62px;
+    right: 18px;
+    z-index: 60;
+    background: #eafff1;
+    border: 1px solid #91dfb2;
+    color: #135b34;
+    padding: 12px 15px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px #0002;
+}
+
+.toast[hidden] {
+    display: none;
+}
+
+.overlay {
+    display: none;
+}
+
+@media(max-width:900px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: .3s;
+        width: 245px;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main {
+        margin-left: 0;
+    }
+
+    .overlay.show {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: #0008;
+        z-index: 25;
+    }
+}
+
+@media(max-width:600px) {
+    .topbar {
+        font-size: 16px;
+    }
+
+    .workspace {
+        padding: 9px;
+    }
+
+    .formgrid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .tag {
+        display: none;
+    }
+
+    .title {
+        font-size: 15px;
+    }
+
+    .field label {
+        font-size: 12px;
+    }
+
+    .actions {
+        display: grid;
+        grid-template-columns: 1fr 100px;
+    }
+
+    .tablehead {
+        display: block;
+    }
+
+    .searchwrap {
+        width: 100%;
+    }
+
+    .table-scroll {
+        display: none;
+    }
+
+    .mobilecards {
+        display: grid;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .student {
+        display: grid;
+        grid-template-columns: 35px 1fr auto;
+        gap: 8px;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        align-items: center;
+    }
+
+    .studentavatar {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background: #eeeaff;
+        display: grid;
+        place-items: center;
+    }
+
+    .studentmain strong,
+    .studentmain small {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 12px;
+        overflow-wrap: anywhere;
+    }
+
+    .studentside {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-end;
+    }
+
+    .action {
+        min-width: 30px;
+        min-height: 30px;
+    }
+}

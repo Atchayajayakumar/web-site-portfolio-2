@@ -4,12 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Management System</title>
+    <title>Paavai Student Management System</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
+
     <div class="brand">
         <div class="logo">🎓</div>
         <h2>Paavai Engineering College</h2>
@@ -17,101 +19,139 @@
     </div>
 
     <nav class="nav">
-        <a href="#dashboard" class="active">⌂ Dashboard</a>
-        <a href="#registration">♙ Register Student</a>
-        <a href="#students">♟ View Students</a>
-        <a href="#departments">▤ Department</a>
-        <a href="#reports">▣ Reports</a>
-        <a href="#settings">⚙ Settings</a>
+        <a href="#" data-page="dashboard" class="active">⌂ Dashboard</a>
+        <a href="#" data-page="registration">♙ Register Student</a>
+        <a href="#" data-page="students">♟ View Students</a>
+        <a href="#" data-page="department">▤ Department</a>
+        <a href="#" data-page="reports">▣ Reports</a>
+        <a href="#" data-page="settings">⚙ Settings</a>
     </nav>
 
-    <a href="#" class="logout" id="logout">⇥ Logout</a>
+    <button class="logout" id="logout">⇥ Logout</button>
 </aside>
 
 <div class="overlay" id="overlay"></div>
 
-<main class="main" id="dashboard">
+<!-- MAIN -->
+<main class="main">
 
     <header class="topbar">
-        <button id="menu">☰</button>
-        Student Management System
+        <button id="menu" class="menu-btn">☰</button>
+        <h2>Student Management System</h2>
+        <div class="profile">AJ <span>Atchaya</span></div>
     </header>
 
     <div class="workspace">
 
-        <section class="card" id="registration">
+        <!-- DASHBOARD -->
+        <section class="page" id="dashboard">
 
-            <div class="title">
-                ♟ Student Registration
-                <span class="tag">Learn · Grow · Achieve</span>
+            <div class="page-heading">
+                <div>
+                    <h2>Dashboard Overview</h2>
+                    <p>Welcome to Paavai Student Management System</p>
+                </div>
             </div>
 
-            <div class="formbody">
+            <div class="stats-grid">
+
+                <div class="stat-card purple">
+                    <div class="stat-icon">👨‍🎓</div>
+                    <p>Total Students</p>
+                    <h2 id="totalCount">0</h2>
+                </div>
+
+                <div class="stat-card green">
+                    <div class="stat-icon">✓</div>
+                    <p>Active Students</p>
+                    <h2 id="activeCount">0</h2>
+                </div>
+
+                <div class="stat-card red">
+                    <div class="stat-icon">!</div>
+                    <p>Inactive Students</p>
+                    <h2 id="inactiveCount">0</h2>
+                </div>
+
+                <div class="stat-card orange">
+                    <div class="stat-icon">▤</div>
+                    <p>Departments</p>
+                    <h2 id="deptCount">0</h2>
+                </div>
+
+            </div>
+
+            <div class="card">
+                <div class="section-title">Recent Students</div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Name</th>
+                                <th>Register Number</th>
+                                <th>Department</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card quick-card">
+                <div class="section-title">Quick Actions</div>
+                <div class="quick-actions">
+                    <button class="btn primary" data-go="registration">+ Register Student</button>
+                    <button class="btn secondary" data-go="students">View Students</button>
+                    <button class="btn secondary" data-go="reports">View Reports</button>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- STUDENT REGISTRATION -->
+        <section class="page hidden" id="registration">
+
+            <div class="page-heading">
+                <div>
+                    <h2>Student Registration</h2>
+                    <p>Enter student details below</p>
+                </div>
+            </div>
+
+            <div class="card">
+
+                <div class="section-title">♟ Student Information</div>
+
                 <form id="studentForm">
 
-                    <div class="formgrid">
+                    <div class="form-grid">
 
                         <div class="field">
                             <label>Student Name *</label>
-                            <input class="control" id="name"
+                            <input type="text" id="name"
                             placeholder="Enter student name" required>
                         </div>
 
                         <div class="field">
-                            <label>Department *</label>
-                            <select class="control" id="dept" required>
-                                <option value="">Select Department</option>
-                                <option>CSE</option>
-                                <option>ECE</option>
-                                <option>IT</option>
-                                <option>EEE</option>
-                                <option>Mechanical</option>
-                                <option>Civil</option>
-                            </select>
-                        </div>
-
-                        <div class="field">
                             <label>Register Number *</label>
-                            <input class="control" id="reg"
+                            <input type="text" id="reg"
                             placeholder="Enter register number" required>
-                        </div>
-
-                        <div class="field pair">
-                            <div>
-                                <label>Year *</label>
-                                <select class="control" id="year" required>
-                                    <option value="">Select Year</option>
-                                    <option>I Year</option>
-                                    <option>II Year</option>
-                                    <option>III Year</option>
-                                    <option>IV Year</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label>Date of Birth *</label>
-                                <input class="control" type="date" id="dob" required>
-                            </div>
                         </div>
 
                         <div class="field">
                             <label>Email *</label>
-                            <input class="control" type="email" id="email"
+                            <input type="email" id="email"
                             placeholder="Enter email address" required>
                         </div>
 
                         <div class="field">
-                            <label>Status *</label>
-                            <select class="control" id="status">
-                                <option>Active</option>
-                                <option>Inactive</option>
-                            </select>
-                        </div>
-
-                        <div class="field">
                             <label>Phone Number *</label>
-                            <input class="control" type="tel" id="phone"
-                            maxlength="10" placeholder="Enter 10 digit number" required>
+                            <input type="tel" id="phone"
+                            maxlength="10" pattern="[0-9]{10}"
+                            placeholder="Enter 10 digit number" required>
                         </div>
 
                         <div class="field">
@@ -123,59 +163,229 @@
                             </div>
                         </div>
 
+                        <div class="field">
+                            <label>Department *</label>
+                            <select id="dept" required></select>
+                        </div>
+
+                        <div class="field">
+                            <label>Year *</label>
+                            <select id="year" required>
+                                <option value="">Select Year</option>
+                                <option>I Year</option>
+                                <option>II Year</option>
+                                <option>III Year</option>
+                                <option>IV Year</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label>Date of Birth *</label>
+                            <input type="date" id="dob" required>
+                        </div>
+
+                        <div class="field">
+                            <label>Status</label>
+                            <select id="status">
+                                <option>Active</option>
+                                <option>Inactive</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label>Student Photo</label>
+                            <input type="file" id="photo" accept="image/*">
+                        </div>
+
+                        <div class="field full">
+                            <label>Address</label>
+                            <textarea id="address" rows="3"
+                            placeholder="Enter student address"></textarea>
+                        </div>
+
                     </div>
 
-                    <div class="actions">
-                        <button class="btn primary" id="submit" type="submit">
+                    <div class="form-actions">
+                        <button type="submit" class="btn primary" id="submitBtn">
                             Register Student
                         </button>
-                        <button class="btn light" type="reset">Clear</button>
+                        <button type="reset" class="btn secondary">Clear</button>
                     </div>
 
                 </form>
+
             </div>
         </section>
 
-        <section class="card" id="students">
 
-            <div class="tablehead">
-                <div class="title">♟ Student Details</div>
-                <div class="searchwrap">
-                    <input class="search" id="search"
-                    placeholder="Search by Name or Register Number...">
-                </div>
-            </div>
+        <!-- VIEW STUDENTS -->
+        <section class="page hidden" id="students">
 
-            <div class="table-scroll">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>S.No</th>
-                            <th>Name</th>
-                            <th>Register Number</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Gender</th>
-                            <th>Department</th>
-                            <th>Year</th>
-                            <th>DOB</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody"></tbody>
-                </table>
-            </div>
-
-            <div class="mobilecards" id="mobileCards"></div>
-
-            <div class="footer">
-                <span id="count"></span>
+            <div class="page-heading">
                 <div>
-                    <button class="page" id="prev">❮</button>
-                    <span id="page">1</span>
-                    <button class="page" id="next">❯</button>
+                    <h2>Student Details</h2>
+                    <p>Manage all registered students</p>
                 </div>
+                <button class="btn primary" data-go="registration">
+                    + Add Student
+                </button>
+            </div>
+
+            <div class="card">
+
+                <div class="table-toolbar">
+                    <h3>All Students</h3>
+                    <input type="search" id="search"
+                    placeholder="Search Name or Register Number...">
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Name</th>
+                                <th>Register Number</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Gender</th>
+                                <th>Department</th>
+                                <th>Year</th>
+                                <th>DOB</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+
+                <div id="mobileCards" class="mobile-cards"></div>
+
+                <div class="pagination">
+                    <span id="count">Showing 0 students</span>
+                    <div>
+                        <button id="prev">❮</button>
+                        <span id="page">1</span>
+                        <button id="next">❯</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- DEPARTMENT -->
+        <section class="page hidden" id="department">
+
+            <div class="page-heading">
+                <div>
+                    <h2>Department Management</h2>
+                    <p>Manage college departments</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">Add Department</div>
+
+                <form id="deptForm" class="department-form">
+                    <input type="text" id="newDept"
+                    placeholder="Enter department name" required>
+                    <button class="btn primary" type="submit">Add Department</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="section-title">Department List</div>
+                <div id="departmentList" class="department-grid"></div>
+            </div>
+
+        </section>
+
+
+        <!-- REPORTS -->
+        <section class="page hidden" id="reports">
+
+            <div class="page-heading">
+                <div>
+                    <h2>Student Reports</h2>
+                    <p>Student statistics and reports</p>
+                </div>
+                <button class="btn primary" id="downloadReport">
+                    Download CSV
+                </button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card purple">
+                    <p>Total Students</p>
+                    <h2 id="reportTotal">0</h2>
+                </div>
+
+                <div class="stat-card green">
+                    <p>Active Students</p>
+                    <h2 id="reportActive">0</h2>
+                </div>
+
+                <div class="stat-card red">
+                    <p>Inactive Students</p>
+                    <h2 id="reportInactive">0</h2>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">Department-wise Student Report</div>
+                <div id="reportList" class="report-list"></div>
+            </div>
+
+        </section>
+
+
+        <!-- SETTINGS -->
+        <section class="page hidden" id="settings">
+
+            <div class="page-heading">
+                <div>
+                    <h2>Settings</h2>
+                    <p>Manage system preferences</p>
+                </div>
+            </div>
+
+            <div class="card settings-card">
+
+                <div class="section-title">College Information</div>
+
+                <div class="field">
+                    <label>College Name</label>
+                    <input type="text" value="Paavai Engineering College"
+                    id="collegeName">
+                </div>
+
+                <div class="field">
+                    <label>System Name</label>
+                    <input type="text" value="Student Management System"
+                    id="systemName">
+                </div>
+
+                <button class="btn primary" id="saveSettings">
+                    Save Settings
+                </button>
+
+            </div>
+
+            <div class="card settings-card">
+                <div class="section-title">Appearance</div>
+                <p>Choose dashboard theme</p>
+                <button class="btn secondary" id="themeBtn">
+                    Toggle Dark / Light Mode
+                </button>
+            </div>
+
+            <div class="card settings-card">
+                <div class="section-title">Data Management</div>
+                <p>Download a backup of student records.</p>
+                <button class="btn primary" id="backupBtn">Download Backup</button>
+                <button class="btn danger" id="resetBtn">Reset All Student Data</button>
             </div>
 
         </section>
@@ -183,10 +393,23 @@
     </div>
 </main>
 
+
+<!-- VIEW MODAL -->
+<div class="modal" id="viewModal">
+    <div class="modal-box">
+        <button class="modal-close" id="closeModal">×</button>
+        <h2>Student Profile</h2>
+        <div id="studentProfile"></div>
+    </div>
+</div>
+
+
+<!-- TOAST -->
 <div class="toast" id="toast" hidden>
     <span id="toastText"></span>
     <button id="toastClose">×</button>
 </div>
+
 
 <script src="script.js"></script>
 </body>

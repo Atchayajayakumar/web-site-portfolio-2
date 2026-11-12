@@ -1,0 +1,121 @@
+
+let employees = JSON.parse(localStorage.getItem("employees")) || [];
+
+let editIndex = -1;
+
+let form = document.getElementById("employeeForm");
+
+function displayEmployees(data = employees) {
+
+    let list = document.getElementById("employeeList");
+
+    list.innerHTML = "";
+
+    data.forEach((emp, index) => {
+
+        list.innerHTML += `
+        <tr>
+            <td>${emp.name}</td>
+            <td>${emp.empid}</td>
+            <td>${emp.email}</td>
+            <td>${emp.phone}</td>
+            <td>${emp.gender}</td>
+            <td>${emp.department}</td>
+            <td>${emp.date}</td>
+            <td>
+                <button class="edit" onclick="editEmployee(${index})">Edit</button>
+                <button class="delete" onclick="deleteEmployee(${index})">Delete</button>
+            </td>
+        </tr>`;
+    });
+}
+
+form.addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    let gender = document.querySelector('input[name="gender"]:checked');
+
+    let employee = {
+        name: document.getElementById("name").value.trim(),
+        empid: document.getElementById("empid").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        gender: gender.value,
+        department: document.getElementById("department").value,
+        date: document.getElementById("date").value
+    };
+
+    let duplicate = employees.some((emp, i) =>
+        (emp.empid.toLowerCase() === employee.empid.toLowerCase() ||
+        emp.email.toLowerCase() === employee.email.toLowerCase()) &&
+        i !== editIndex
+    );
+
+    if (duplicate) {
+        alert("Employee ID or Email already exists!");
+        return;
+    }
+
+    if (editIndex === -1) {
+        employees.push(employee);
+        alert("Employee Registered Successfully!");
+    } else {
+        employees[editIndex] = employee;
+        alert("Employee Updated Successfully!");
+        editIndex = -1;
+    }
+
+    localStorage.setItem("employees", JSON.stringify(employees));
+
+    form.reset();
+    document.getElementById("submitBtn").innerText = "Register";
+
+    displayEmployees();
+});
+
+function editEmployee(index) {
+
+    let emp = employees[index];
+
+    document.getElementById("name").value = emp.name;
+    document.getElementById("empid").value = emp.empid;
+    document.getElementById("email").value = emp.email;
+    document.getElementById("phone").value = emp.phone;
+    document.getElementById("department").value = emp.department;
+    document.getElementById("date").value = emp.date;
+
+    document.querySelector(
+        `input[name="gender"][value="${emp.gender}"]`
+    ).checked = true;
+
+    editIndex = index;
+
+    document.getElementById("submitBtn").innerText = "Update";
+}
+
+function deleteEmployee(index) {
+
+    if (confirm("Are you sure you want to delete?")) {
+
+        employees.splice(index, 1);
+
+        localStorage.setItem("employees", JSON.stringify(employees));
+
+        displayEmployees();
+    }
+}
+
+document.getElementById("search").addEventListener("input", function() {
+
+    let value = this.value.toLowerCase();
+
+    let result = employees.filter(emp =>
+        emp.name.toLowerCase().includes(value) ||
+        emp.empid.toLowerCase().includes(value)
+    );
+
+    displayEmployees(result);
+});
+
+displayEmployees();

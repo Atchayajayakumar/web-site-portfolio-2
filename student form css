@@ -130,3 +130,54 @@ th {
         grid-template-columns: 1fr;
     }
 }
+.sidebar {
+    width: 220px;
+    min-width: 220px;
+    min-height: 100vh;
+    background: linear-gradient(#10194f, #292080);
+    color: white;
+    text-align: center;
+    padding: 30px 15px;
+}
+
+.college-logo {
+    font-size: 65px;
+    margin-bottom: 15px;
+}
+
+.sidebar h2 {
+    font-size: 21px;
+    line-height: 1.4;
+}
+
+.subtitle {
+    font-size: 13px;
+    font-style: italic;
+    margin-top: 15px;
+}
+
+.quote {
+    margin-top: 100px;
+    font-size: 17px;
+    font-style: italic;
+    line-height: 1.8;
+    color: #e0d9ff;
+}
+
+.bottom-text {
+    margin-top: 100px;
+    font-size: 12px;
+    line-height: 2;
+    color: #c9c5ff;
+}
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.main {
+    flex: 1;
+    min-width: 0;
+    padding: 20px;
+}

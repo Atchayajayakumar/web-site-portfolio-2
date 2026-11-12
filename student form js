@@ -1,121 +1,130 @@
 
-let employees = JSON.parse(localStorage.getItem("employees")) || [];
+let students = JSON.parse(localStorage.getItem("students")) || [];
 
 let editIndex = -1;
 
-let form = document.getElementById("employeeForm");
-
-function displayEmployees(data = employees) {
-
-    let list = document.getElementById("employeeList");
-
-    list.innerHTML = "";
-
-    data.forEach((emp, index) => {
-
-        list.innerHTML += `
-        <tr>
-            <td>${emp.name}</td>
-            <td>${emp.empid}</td>
-            <td>${emp.email}</td>
-            <td>${emp.phone}</td>
-            <td>${emp.gender}</td>
-            <td>${emp.department}</td>
-            <td>${emp.date}</td>
-            <td>
-                <button class="edit" onclick="editEmployee(${index})">Edit</button>
-                <button class="delete" onclick="deleteEmployee(${index})">Delete</button>
-            </td>
-        </tr>`;
-    });
-}
+let form = document.getElementById("studentForm");
 
 form.addEventListener("submit", function(e) {
 
     e.preventDefault();
 
-    let gender = document.querySelector('input[name="gender"]:checked');
+    let gender = document.querySelector(
+        'input[name="gender"]:checked'
+    );
 
-    let employee = {
+    let student = {
         name: document.getElementById("name").value.trim(),
-        empid: document.getElementById("empid").value.trim(),
+        regno: document.getElementById("regno").value.trim(),
         email: document.getElementById("email").value.trim(),
-        phone: document.getElementById("phone").value.trim(),
+        phone: document.getElementById("phone").value,
         gender: gender.value,
         department: document.getElementById("department").value,
-        date: document.getElementById("date").value
+        year: document.getElementById("year").value,
+        dob: document.getElementById("dob").value,
+        status: document.getElementById("status").value
     };
 
-    let duplicate = employees.some((emp, i) =>
-        (emp.empid.toLowerCase() === employee.empid.toLowerCase() ||
-        emp.email.toLowerCase() === employee.email.toLowerCase()) &&
+    let duplicate = students.some((s, i) =>
+        (s.regno.toLowerCase() === student.regno.toLowerCase() ||
+        s.email.toLowerCase() === student.email.toLowerCase()) &&
         i !== editIndex
     );
 
     if (duplicate) {
-        alert("Employee ID or Email already exists!");
+        alert("Register Number or Email already exists!");
         return;
     }
 
     if (editIndex === -1) {
-        employees.push(employee);
-        alert("Employee Registered Successfully!");
+        students.push(student);
+        alert("Student Registered Successfully!");
     } else {
-        employees[editIndex] = employee;
-        alert("Employee Updated Successfully!");
+        students[editIndex] = student;
+        alert("Student Updated Successfully!");
         editIndex = -1;
     }
 
-    localStorage.setItem("employees", JSON.stringify(employees));
-
+    saveData();
     form.reset();
-    document.getElementById("submitBtn").innerText = "Register";
 
-    displayEmployees();
+    document.getElementById("submitBtn").innerText = "Register Student";
+
+    displayStudents();
 });
 
-function editEmployee(index) {
+function saveData() {
+    localStorage.setItem("students", JSON.stringify(students));
+}
 
-    let emp = employees[index];
+function displayStudents() {
 
-    document.getElementById("name").value = emp.name;
-    document.getElementById("empid").value = emp.empid;
-    document.getElementById("email").value = emp.email;
-    document.getElementById("phone").value = emp.phone;
-    document.getElementById("department").value = emp.department;
-    document.getElementById("date").value = emp.date;
+    let list = document.getElementById("studentList");
+    let search = document.getElementById("search").value.toLowerCase();
+
+    list.innerHTML = "";
+
+    students.forEach((s, index) => {
+
+        if (
+            s.name.toLowerCase().includes(search) ||
+            s.regno.toLowerCase().includes(search)
+        ) {
+
+            list.innerHTML += `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${s.name}</td>
+                <td>${s.regno}</td>
+                <td>${s.email}</td>
+                <td>${s.phone}</td>
+                <td>${s.gender}</td>
+                <td>${s.department}</td>
+                <td>${s.year}</td>
+                <td>${s.dob}</td>
+                <td>${s.status}</td>
+                <td>
+                    <button class="edit" onclick="editStudent(${index})">Edit</button>
+                    <button class="delete" onclick="deleteStudent(${index})">Delete</button>
+                </td>
+            </tr>`;
+        }
+    });
+}
+
+function editStudent(index) {
+
+    let s = students[index];
+
+    document.getElementById("name").value = s.name;
+    document.getElementById("regno").value = s.regno;
+    document.getElementById("email").value = s.email;
+    document.getElementById("phone").value = s.phone;
+    document.getElementById("department").value = s.department;
+    document.getElementById("year").value = s.year;
+    document.getElementById("dob").value = s.dob;
+    document.getElementById("status").value = s.status;
 
     document.querySelector(
-        `input[name="gender"][value="${emp.gender}"]`
+        `input[name="gender"][value="${s.gender}"]`
     ).checked = true;
 
     editIndex = index;
 
-    document.getElementById("submitBtn").innerText = "Update";
+    document.getElementById("submitBtn").innerText = "Update Student";
 }
 
-function deleteEmployee(index) {
+function deleteStudent(index) {
 
     if (confirm("Are you sure you want to delete?")) {
 
-        employees.splice(index, 1);
+        students.splice(index, 1);
 
-        localStorage.setItem("employees", JSON.stringify(employees));
-
-        displayEmployees();
+        saveData();
+        displayStudents();
     }
 }
 
-document.getElementById("search").addEventListener("input", function() {
+document.getElementById("search").addEventListener("input", displayStudents);
 
-    let value = this.value.toLowerCase();
-
-    let result = employees.filter(emp =>
-        emp.name.toLowerCase().includes(value) ||
-        emp.empid.toLowerCase().includes(value)
-    );
-
-    displayEmployees(result);
-});
-
-displayEmployees();
+displayStudents();

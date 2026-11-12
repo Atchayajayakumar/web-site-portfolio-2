@@ -2,74 +2,127 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Employee Registration</title>
+    <title>Student Management</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
 
-    <h2>Employee Registration Form</h2>
+    <h2>Student Management System</h2>
 
-    <form id="employeeForm">
+    <div class="form-box">
+        <h3>Student Registration</h3>
 
-        <label>Employee Name</label>
-        <input type="text" id="name" placeholder="Enter Name" required>
+        <form id="studentForm">
 
-        <label>Employee ID</label>
-        <input type="text" id="empid" placeholder="Enter Employee ID" required>
+            <div class="form-grid">
 
-        <label>Email</label>
-        <input type="email" id="email" placeholder="Enter Email" required>
+                <div>
+                    <label>Student Name *</label>
+                    <input type="text" id="name" placeholder="Enter student name" required>
+                </div>
 
-        <label>Phone Number</label>
-        <input type="text" id="phone" placeholder="Enter Phone" required>
+                <div>
+                    <label>Department *</label>
+                    <select id="department" required>
+                        <option value="">Select Department</option>
+                        <option>ECE</option>
+                        <option>CSE</option>
+                        <option>IT</option>
+                        <option>EEE</option>
+                        <option>MECH</option>
+                    </select>
+                </div>
 
-        <label>Gender</label>
-        <div class="gender">
-            <input type="radio" name="gender" value="Male" required> Male
-            <input type="radio" name="gender" value="Female"> Female
+                <div>
+                    <label>Register Number *</label>
+                    <input type="text" id="regno" placeholder="Enter register number" required>
+                </div>
+
+                <div>
+                    <label>Year *</label>
+                    <select id="year" required>
+                        <option value="">Select Year</option>
+                        <option>I Year</option>
+                        <option>II Year</option>
+                        <option>III Year</option>
+                        <option>IV Year</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Email *</label>
+                    <input type="email" id="email" placeholder="Enter email" required>
+                </div>
+
+                <div>
+                    <label>Date of Birth *</label>
+                    <input type="date" id="dob" required>
+                </div>
+
+                <div>
+                    <label>Phone Number *</label>
+                    <input type="tel" id="phone" placeholder="Enter phone number" pattern="[0-9]{10}" required>
+                </div>
+
+                <div>
+                    <label>Status</label>
+                    <select id="status">
+                        <option>Active</option>
+                        <option>Inactive</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <label>Gender *</label>
+            <div class="gender">
+                <label><input type="radio" name="gender" value="Male" required> Male</label>
+                <label><input type="radio" name="gender" value="Female"> Female</label>
+                <label><input type="radio" name="gender" value="Others"> Others</label>
+            </div>
+
+            <button type="submit" id="submitBtn">Register Student</button>
+            <button type="reset" class="clear">Clear</button>
+
+        </form>
+    </div>
+
+    <div class="table-box">
+
+        <h3>Student Details</h3>
+
+        <input type="text" id="search"
+        placeholder="Search by Name or Register Number">
+
+        <div class="table-scroll">
+            <table>
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Name</th>
+                        <th>Register Number</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Gender</th>
+                        <th>Department</th>
+                        <th>Year</th>
+                        <th>DOB</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="studentList"></tbody>
+            </table>
         </div>
 
-        <label>Department</label>
-        <select id="department">
-            <option value="">Select Department</option>
-            <option>IT</option>
-            <option>HR</option>
-            <option>Finance</option>
-            <option>Marketing</option>
-        </select>
-
-        <label>Date of Joining</label>
-        <input type="date" id="date" required>
-
-        <button type="submit" id="submitBtn">Register</button>
-
-    </form>
-
-    <h3>Employee Details</h3>
-
-    <input type="text" id="search" placeholder="Search Employee">
-
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Employee ID</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Gender</th>
-                <th>Department</th>
-                <th>Date</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-
-        <tbody id="employeeList"></tbody>
-    </table>
+    </div>
 
 </div>
 
 <script src="script.js"></script>
+
 </body>
 </html>

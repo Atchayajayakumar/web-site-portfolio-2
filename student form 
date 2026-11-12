@@ -126,3 +126,24 @@
 
 </body>
 </html>
+
+
+
+
+<div class="sidebar">
+
+    <div class="college-info">
+
+        <img src="logo.png" class="logo">
+
+        <img src="images.png" class="college-photo">
+
+        <h2>Paavai Engineering College</h2>
+
+        <p>Student Management System</p>
+
+    </div>
+
+    <h3>Dashboard</h3>
+
+</div>

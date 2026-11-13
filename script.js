@@ -1,1 +1,896 @@
+const $ = id => document.getElementById(id);
 
+// STORAGE
+
+let students = JSON.parse(localStorage.getItem("students")) || [
+    {
+        name: "Atchaya J",
+        reg: "2026EC102",
+        email: "atchaya@gmail.com",
+        phone: "9876543210",
+        gender: "Female",
+        dept: "ECE",
+        year: "IV Year",
+        dob: "2004-06-15",
+        status: "Active",
+        address: "Salem"
+    },
+    {
+        name: "Dhivya S",
+        reg: "2026EC103",
+        email: "dhivya@gmail.com",
+        phone: "8765432109",
+        gender: "Female",
+        dept: "ECE",
+        year: "IV Year",
+        dob: "2004-07-22",
+        status: "Active",
+        address: "Namakkal"
+    },
+    {
+        name: "Ramesh M",
+        reg: "2026CS101",
+        email: "ramesh@gmail.com",
+        phone: "9123456780",
+        gender: "Male",
+        dept: "CSE",
+        year: "IV Year",
+        dob: "2004-08-10",
+        status: "Inactive",
+        address: "Salem"
+    },
+    {
+        name: "Sneha R",
+        reg: "2026IT101",
+        email: "sneha@gmail.com",
+        phone: "9345678901",
+        gender: "Female",
+        dept: "IT",
+        year: "IV Year",
+        dob: "2004-09-28",
+        status: "Active",
+        address: "Erode"
+    }
+];
+
+let departments = JSON.parse(localStorage.getItem("departments")) ||
+    ["CSE", "ECE", "IT", "EEE", "Mechanical", "Civil"];
+
+let editIndex = -1;
+let currentPage = 1;
+const pageSize = 5;
+
+
+// SAVE DATA
+
+function save() {
+    localStorage.setItem("students", JSON.stringify(students));
+    localStorage.setItem("departments", JSON.stringify(departments));
+}
+
+
+// HTML SAFE TEXT
+
+function esc(value) {
+    return String(value ?? "").replace(/[&<>"']/g, c => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    }[c]));
+}
+
+
+// TOAST
+
+let toastTimer;
+
+function toast(message) {
+    $("toastText").textContent = message;
+    $("toast").hidden = false;
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(() => {
+        $("toast").hidden = true;
+    }, 3000);
+}
+
+$("toastClose").onclick = () => {
+    $("toast").hidden = true;
+};
+
+
+// NAVIGATION
+
+const pages = document.querySelectorAll(".page");
+const navLinks = document.querySelectorAll(".nav a");
+
+function openPage(page) {
+
+    pages.forEach(p => p.classList.add("hidden"));
+
+    $(page).classList.remove("hidden");
+
+    navLinks.forEach(link => {
+        link.classList.toggle(
+            "active",
+            link.dataset.page === page
+        );
+    });
+
+    if (page === "dashboard") {
+        updateDashboard();
+    }
+
+    if (page === "students") {
+        renderStudents();
+    }
+
+    if (page === "department") {
+        renderDepartments();
+    }
+
+    if (page === "reports") {
+        updateReports();
+    }
+
+    closeMenu();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+// SIDEBAR LINKS
+
+navLinks.forEach(link => {
+
+    link.addEventListener("click", e => {
+        e.preventDefault();
+        openPage(link.dataset.page);
+    });
+
+});
+
+
+// QUICK ACTION BUTTONS
+
+document.querySelectorAll("[data-go]").forEach(btn => {
+
+    btn.addEventListener("click", () => {
+        openPage(btn.dataset.go);
+    });
+
+});
+
+
+// MOBILE MENU
+
+function closeMenu() {
+    $("sidebar").classList.remove("open");
+    $("overlay").classList.remove("show");
+}
+
+$("menu").onclick = () => {
+    $("sidebar").classList.toggle("open");
+    $("overlay").classList.toggle("show");
+};
+
+$("overlay").onclick = closeMenu;
+
+
+// DEPARTMENT DROPDOWN
+
+function updateDepartmentDropdown(selected = "") {
+
+    $("dept").innerHTML =
+        `<option value="">Select Department</option>` +
+        departments.map(d =>
+            `<option value="${esc(d)}">${esc(d)}</option>`
+        ).join("");
+
+    $("dept").value = selected;
+}
+
+
+// DASHBOARD
+
+function updateDashboard() {
+
+    let active = students.filter(s => s.status === "Active").length;
+
+    let inactive = students.length - active;
+
+    $("totalCount").textContent = students.length;
+    $("activeCount").textContent = active;
+    $("inactiveCount").textContent = inactive;
+    $("deptCount").textContent = departments.length;
+
+    $("recentBody").innerHTML = students.length
+        ? students.slice(0, 5).map((s, i) => `
+            <tr>
+                <td>${i + 1}</td>
+                <td>${esc(s.name)}</td>
+                <td>${esc(s.reg)}</td>
+                <td>${esc(s.dept)}</td>
+                <td>
+                    <span class="status ${s.status === "Active" ? "status-active" : "status-inactive"}">
+                        ${esc(s.status)}
+                    </span>
+                </td>
+            </tr>
+        `).join("")
+        : `<tr><td colspan="5">No student records found</td></tr>`;
+}
+
+
+// FORM DATA
+
+function getFormData() {
+
+    let gender = document.querySelector(
+        'input[name="gender"]:checked'
+    );
+
+    return {
+        name: $("name").value.trim(),
+        reg: $("reg").value.trim(),
+        email: $("email").value.trim(),
+        phone: $("phone").value.trim(),
+        gender: gender ? gender.value : "",
+        dept: $("dept").value,
+        year: $("year").value,
+        dob: $("dob").value,
+        status: $("status").value,
+        address: $("address").value.trim()
+    };
+}
+
+
+// REGISTER AND UPDATE
+
+$("studentForm").addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    let data = getFormData();
+
+    if (!/^[0-9]{10}$/.test(data.phone)) {
+        toast("Enter valid 10 digit phone number");
+        return;
+    }
+
+    if (data.dob > new Date().toISOString().slice(0, 10)) {
+        toast("Date of birth cannot be in future");
+        return;
+    }
+
+    let duplicate = students.some((s, i) =>
+        i !== editIndex && (
+            s.reg.toLowerCase() === data.reg.toLowerCase() ||
+            s.email.toLowerCase() === data.email.toLowerCase()
+        )
+    );
+
+    if (duplicate) {
+        toast("Register Number or Email already exists!");
+        return;
+    }
+
+    let photoFile = $("photo").files[0];
+
+    function finishSave() {
+
+        if (editIndex === -1) {
+            students.unshift(data);
+            toast("Student Registered Successfully!");
+        } else {
+            students[editIndex] = data;
+            toast("Student Updated Successfully!");
+        }
+
+        save();
+
+        editIndex = -1;
+        currentPage = 1;
+
+        $("studentForm").reset();
+        $("submitBtn").textContent = "Register Student";
+
+        updateDepartmentDropdown();
+
+        updateDashboard();
+        renderStudents();
+        updateReports();
+
+        openPage("students");
+    }
+
+    // Optional photo preview/storage
+    if (photoFile) {
+
+        if (!photoFile.type.startsWith("image/")) {
+            toast("Please select a valid image");
+            return;
+        }
+
+        if (photoFile.size > 500000) {
+            toast("Photo size should be below 500 KB");
+            return;
+        }
+
+        let reader = new FileReader();
+
+        reader.onload = function() {
+            data.photo = reader.result;
+            finishSave();
+        };
+
+        reader.onerror = function() {
+            toast("Unable to read photo");
+        };
+
+        reader.readAsDataURL(photoFile);
+
+    } else {
+        if (editIndex !== -1) {
+            data.photo = students[editIndex].photo || "";
+        }
+        finishSave();
+    }
+
+});
+
+
+// CLEAR FORM
+
+$("studentForm").addEventListener("reset", function() {
+
+    editIndex = -1;
+
+    $("submitBtn").textContent = "Register Student";
+
+    setTimeout(updateDepartmentDropdown, 0);
+
+});
+
+
+// EDIT STUDENT
+
+function editStudent(i) {
+
+    let s = students[i];
+
+    editIndex = i;
+
+    $("name").value = s.name;
+    $("reg").value = s.reg;
+    $("email").value = s.email;
+    $("phone").value = s.phone;
+
+    $("dept").value = s.dept;
+    $("year").value = s.year;
+    $("dob").value = s.dob;
+    $("status").value = s.status;
+    $("address").value = s.address || "";
+
+    let radio = document.querySelector(
+        `input[name="gender"][value="${s.gender}"]`
+    );
+
+    if (radio) radio.checked = true;
+
+    $("photo").value = "";
+
+    $("submitBtn").textContent = "Update Student";
+
+    openPage("registration");
+}
+
+
+// DELETE STUDENT
+
+function deleteStudent(i) {
+
+    if (confirm("Are you sure you want to delete this student?")) {
+
+        students.splice(i, 1);
+
+        save();
+
+        renderStudents();
+        updateDashboard();
+        updateReports();
+
+        toast("Student deleted successfully!");
+    }
+}
+
+
+// VIEW STUDENT
+
+function viewStudent(i) {
+
+    let s = students[i];
+
+    $("studentProfile").innerHTML = `
+        ${s.photo ? `<div class="profile-row"><img src="${s.photo}" alt="Student photo" style="width:85px;height:85px;object-fit:cover;border-radius:50%"></div>` : ""}
+        <div class="profile-row"><b>Name:</b> ${esc(s.name)}</div>
+        <div class="profile-row"><b>Register Number:</b> ${esc(s.reg)}</div>
+        <div class="profile-row"><b>Email:</b> ${esc(s.email)}</div>
+        <div class="profile-row"><b>Phone:</b> ${esc(s.phone)}</div>
+        <div class="profile-row"><b>Gender:</b> ${esc(s.gender)}</div>
+        <div class="profile-row"><b>Department:</b> ${esc(s.dept)}</div>
+        <div class="profile-row"><b>Year:</b> ${esc(s.year)}</div>
+        <div class="profile-row"><b>DOB:</b> ${esc(s.dob)}</div>
+        <div class="profile-row"><b>Status:</b> ${esc(s.status)}</div>
+        <div class="profile-row"><b>Address:</b> ${esc(s.address || "-")}</div>
+    `;
+
+    $("viewModal").classList.add("show");
+}
+
+
+// CLOSE MODAL
+
+$("closeModal").onclick = () => {
+    $("viewModal").classList.remove("show");
+};
+
+$("viewModal").onclick = e => {
+    if (e.target === $("viewModal")) {
+        $("viewModal").classList.remove("show");
+    }
+};
+
+
+// ACTION BUTTONS
+
+function actionHandler(e) {
+
+    let btn = e.target.closest("[data-action]");
+
+    if (!btn) return;
+
+    let i = Number(btn.dataset.index);
+
+    if (btn.dataset.action === "edit") {
+        editStudent(i);
+    }
+
+    if (btn.dataset.action === "delete") {
+        deleteStudent(i);
+    }
+
+    if (btn.dataset.action === "view") {
+        viewStudent(i);
+    }
+}
+
+
+// ACTION BUTTON HTML
+
+function actionButtons(i) {
+
+    return `
+        <div class="action-group">
+            <button class="action edit" data-action="edit" data-index="${i}" title="Edit">edit</button>
+            <button class="action delete" data-action="delete" data-index="${i}" title="Delete">delete</button>
+            <button class="action view" data-action="view" data-index="${i}" title="View">view</button>
+        </div>
+    `;
+}
+
+
+// DATE FORMAT
+
+function formatDate(date) {
+
+    if (!date) return "-";
+
+    let a = date.split("-");
+
+    return `${a[2]}-${a[1]}-${a[0]}`;
+}
+
+
+// SEARCH
+
+function getFilteredStudents() {
+
+    let q = $("search").value.toLowerCase().trim();
+
+    return students.map((s, i) => ({
+        ...s,
+        originalIndex: i
+    })).filter(s =>
+        s.name.toLowerCase().includes(q) ||
+        s.reg.toLowerCase().includes(q)
+    );
+}
+
+
+// DISPLAY STUDENTS
+
+function renderStudents() {
+
+    let data = getFilteredStudents();
+
+    let totalPages = Math.max(
+        1,
+        Math.ceil(data.length / pageSize)
+    );
+
+    currentPage = Math.min(currentPage, totalPages);
+
+    let start = (currentPage - 1) * pageSize;
+
+    let list = data.slice(start, start + pageSize);
+
+    // DESKTOP TABLE
+
+    $("tableBody").innerHTML = list.length
+        ? list.map((s, i) => `
+            <tr>
+                <td>${start + i + 1}</td>
+                <td>${esc(s.name)}</td>
+                <td>${esc(s.reg)}</td>
+                <td>${esc(s.email)}</td>
+                <td>${esc(s.phone)}</td>
+                <td>${esc(s.gender)}</td>
+                <td>${esc(s.dept)}</td>
+                <td>${esc(s.year)}</td>
+                <td>${formatDate(s.dob)}</td>
+                <td>
+                    <span class="status ${s.status === "Active" ? "status-active" : "status-inactive"}">
+                        ${esc(s.status)}
+                    </span>
+                </td>
+                <td>${actionButtons(s.originalIndex)}</td>
+            </tr>
+        `).join("")
+        : `<tr><td colspan="11">No students found</td></tr>`;
+
+
+    // MOBILE CARDS
+
+    $("mobileCards").innerHTML = list.length
+        ? list.map(s => `
+            <div class="student-card">
+
+                <div class="avatar">
+                    ${esc(s.name.charAt(0).toUpperCase())}
+                </div>
+
+                <div class="student-info">
+                    <strong>${esc(s.name)}</strong>
+                    <small>${esc(s.reg)}</small>
+                    <small>${esc(s.email)}</small>
+                    <small>${esc(s.dept)} - ${esc(s.year)}</small>
+                </div>
+
+                <div class="student-side">
+                    <span class="status ${s.status === "Active" ? "status-active" : "status-inactive"}">
+                        ${esc(s.status)}
+                    </span>
+
+                    ${actionButtons(s.originalIndex)}
+                </div>
+
+            </div>
+        `).join("")
+        : "<p>No student records found</p>";
+
+
+    $("count").textContent = data.length
+        ? `Showing ${start + 1} to ${Math.min(start + pageSize, data.length)} of ${data.length} students`
+        : "Showing 0 students";
+
+    $("page").textContent = currentPage;
+
+    $("prev").disabled = currentPage === 1;
+    $("next").disabled = currentPage === totalPages;
+}
+
+
+// TABLE ACTION EVENTS
+
+$("tableBody").addEventListener("click", actionHandler);
+$("mobileCards").addEventListener("click", actionHandler);
+
+
+// SEARCH EVENT
+
+$("search").addEventListener("input", function() {
+    currentPage = 1;
+    renderStudents();
+});
+
+
+// PAGINATION
+
+$("prev").onclick = () => {
+
+    if (currentPage > 1) {
+        currentPage--;
+        renderStudents();
+    }
+
+};
+
+$("next").onclick = () => {
+
+    let pages = Math.ceil(
+        getFilteredStudents().length / pageSize
+    );
+
+    if (currentPage < pages) {
+        currentPage++;
+        renderStudents();
+    }
+
+};
+
+
+// DEPARTMENT MANAGEMENT
+
+function renderDepartments() {
+
+    updateDepartmentDropdown();
+
+    $("departmentList").innerHTML = departments.map((d, i) => `
+        <div class="department-item">
+            <span>${esc(d)}</span>
+            <button data-delete-dept="${i}">Delete</button>
+        </div>
+    `).join("");
+}
+
+
+// ADD DEPARTMENT
+
+$("deptForm").addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    let name = $("newDept").value.trim();
+
+    if (!name) return;
+
+    if (departments.some(d =>
+        d.toLowerCase() === name.toLowerCase()
+    )) {
+        toast("Department already exists!");
+        return;
+    }
+
+    departments.push(name.toUpperCase());
+
+    save();
+
+    $("deptForm").reset();
+
+    renderDepartments();
+    updateDashboard();
+    updateReports();
+
+    toast("Department added successfully!");
+});
+
+
+// DELETE DEPARTMENT
+
+$("departmentList").addEventListener("click", function(e) {
+
+    let btn = e.target.closest("[data-delete-dept]");
+
+    if (!btn) return;
+
+    let i = Number(btn.dataset.deleteDept);
+    let dept = departments[i];
+
+    let used = students.some(s => s.dept === dept);
+
+    if (used) {
+        toast("Students are assigned to this department. Cannot delete!");
+        return;
+    }
+
+    if (confirm(`Delete ${dept} department?`)) {
+
+        departments.splice(i, 1);
+
+        save();
+
+        renderDepartments();
+        updateDashboard();
+        updateReports();
+
+        toast("Department deleted!");
+    }
+
+});
+
+
+// REPORTS
+
+function updateReports() {
+
+    let active = students.filter(s => s.status === "Active").length;
+
+    let inactive = students.length - active;
+
+    $("reportTotal").textContent = students.length;
+    $("reportActive").textContent = active;
+    $("reportInactive").textContent = inactive;
+
+    $("reportList").innerHTML = departments.map(d => {
+
+        let count = students.filter(s => s.dept === d).length;
+
+        let percent = students.length
+            ? (count / students.length) * 100
+            : 0;
+
+        return `
+            <div class="report-row">
+                <strong>${esc(d)}</strong>
+
+                <div class="bar-bg">
+                    <div class="bar" style="width:${percent}%"></div>
+                </div>
+
+                <b>${count}</b>
+            </div>
+        `;
+
+    }).join("");
+}
+
+
+// CSV DOWNLOAD
+
+function downloadCSV() {
+
+    if (!students.length) {
+        toast("No student data available!");
+        return;
+    }
+
+    let headings = [
+        "Name", "Register Number", "Email", "Phone",
+        "Gender", "Department", "Year", "DOB",
+        "Status", "Address"
+    ];
+
+    let rows = students.map(s => [
+        s.name, s.reg, s.email, s.phone,
+        s.gender, s.dept, s.year, s.dob,
+        s.status, s.address
+    ]);
+
+    let csv = [headings, ...rows]
+        .map(row =>
+            row.map(value =>
+                `"${String(value ?? "").replace(/"/g, '""')}"`
+            ).join(",")
+        ).join("\n");
+
+    let blob = new Blob(
+        ["\uFEFF" + csv],
+        { type: "text/csv;charset=utf-8;" }
+    );
+
+    let url = URL.createObjectURL(blob);
+
+    let a = document.createElement("a");
+
+    a.href = url;
+    a.download = "Student_Report.csv";
+    a.click();
+
+    URL.revokeObjectURL(url);
+
+    toast("CSV report downloaded!");
+}
+
+$("downloadReport").onclick = downloadCSV;
+$("backupBtn").onclick = downloadCSV;
+
+
+// SETTINGS
+
+$("saveSettings").onclick = () => {
+
+    let college = $("collegeName").value.trim();
+    let system = $("systemName").value.trim();
+
+    if (!college || !system) {
+        toast("Please enter all settings");
+        return;
+    }
+
+    localStorage.setItem("collegeName", college);
+    localStorage.setItem("systemName", system);
+
+    toast("Settings saved successfully!");
+};
+
+
+// LOAD SETTINGS
+
+$("collegeName").value =
+    localStorage.getItem("collegeName") || "ABC Engineering College";
+
+$("systemName").value =
+    localStorage.getItem("systemName") || "Student Management System";
+
+
+// THEME
+
+if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark");
+}
+
+$("themeBtn").onclick = () => {
+
+    document.body.classList.toggle("dark");
+
+    let theme = document.body.classList.contains("dark")
+        ? "dark"
+        : "light";
+
+    localStorage.setItem("theme", theme);
+
+    toast("Theme changed successfully!");
+};
+
+
+// RESET STUDENT DATA
+
+$("resetBtn").onclick = () => {
+
+    if (confirm("Are you sure? All student records will be deleted.")) {
+
+        students = [];
+
+        save();
+
+        renderStudents();
+        updateDashboard();
+        updateReports();
+
+        toast("All student records deleted!");
+
+        openPage("dashboard");
+    }
+
+};
+
+
+// LOGOUT
+
+$("logout").onclick = () => {
+
+    if (confirm("Are you sure you want to logout?")) {
+
+        toast("You have logged out successfully!");
+
+        closeMenu();
+    }
+
+};
+
+
+// INITIAL LOAD
+
+updateDepartmentDropdown();
+save();
+renderStudents();
+updateDashboard();
+updateReports();
+openPage("dashboard");

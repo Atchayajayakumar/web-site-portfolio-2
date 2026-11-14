@@ -7,219 +7,288 @@
 }
 
 body {
-    background: #f1f0ff;
-    padding: 25px;
+    background: #eeeeff;
 }
 
 .container {
-    max-width: 1200px;
-    margin: auto;
+    display: flex;
 }
 
-h2 {
-    background: #29158e;
+/* Sidebar */
+
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: #1d214f;
     color: white;
-    padding: 18px;
+    padding: 20px 15px;
+    position: fixed;
+}
+
+.logo {
+    font-size: 65px;
+    text-align: center;
+    margin: 15px;
+}
+
+.sidebar h2 {
+    text-align: center;
+    font-size: 19px;
+    line-height: 1.4;
+}
+
+.sidebar p {
+    text-align: center;
+    font-style: italic;
+    margin: 20px 0 35px;
+    font-size: 14px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar li {
+    padding: 15px;
+    margin-bottom: 8px;
     border-radius: 8px;
-    margin-bottom: 20px;
+    cursor: pointer;
 }
 
-.form-box, .table-box {
+.sidebar li:hover,
+.sidebar li.active {
+    background: #6044db;
+}
+
+.logout {
+    border-top: 1px solid #aaa;
+    padding: 20px 10px;
+    margin-top: 35px;
+}
+
+/* Main */
+
+.main {
+    margin-left: 250px;
+    width: calc(100% - 250px);
+    padding: 15px 25px;
+}
+
+/* Topbar */
+
+.topbar {
     background: white;
-    padding: 20px;
-    border-radius: 10px;
+    padding: 22px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
-    box-shadow: 0 2px 10px #ddd;
 }
 
-h3 {
-    background: #4926c5;
+.topbar h2 {
+    color: #1d214f;
+    font-size: 22px;
+}
+
+.topbar span {
+    font-weight: bold;
+    color: #29235b;
+}
+
+/* Sections */
+
+.section {
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    overflow: hidden;
+    box-shadow: 0 3px 12px #aaa3;
+}
+
+.section-heading {
+    background: linear-gradient(90deg, #3925a1, #7660e9);
     color: white;
-    padding: 12px;
-    border-radius: 6px;
-    margin-bottom: 18px;
+    padding: 18px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-heading h2 {
+    font-size: 21px;
+}
+
+.section-heading i {
+    font-size: 15px;
+}
+
+/* Form */
+
+form {
+    padding: 25px;
 }
 
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 15px;
+    gap: 40px;
 }
 
-label {
+.form-grid > div > label {
     display: block;
-    margin-bottom: 7px;
     font-weight: bold;
+    margin: 12px 0 8px;
+    color: #201d50;
 }
 
-input, select {
+.form-grid input:not([type="radio"]),
+.form-grid select {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    padding: 12px;
+    border: 1px solid #d4d2e5;
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+    background: white;
 }
+
+.form-grid input:focus,
+.form-grid select:focus {
+    border-color: #6044db;
+}
+
+/* Gender */
 
 .gender {
     display: flex;
-    gap: 25px;
-    margin: 15px 0;
+    gap: 15px;
+    margin-top: 12px;
 }
 
 .gender label {
     display: flex;
     align-items: center;
     gap: 5px;
+    font-size: 14px;
 }
 
-.gender input {
-    width: auto;
+/* Buttons */
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 65px;
 }
 
 button {
-    padding: 10px 20px;
-    background: #4926c5;
+    background: #5034ca;
     color: white;
+    padding: 13px 20px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
 }
 
+button:hover {
+    background: #3925a1;
+}
+
 .clear {
-    background: gray;
+    background: #e5e3f7;
+    color: #222;
 }
 
-#search {
-    margin-bottom: 15px;
+/* Search */
+
+.details-heading input {
+    width: 350px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
 }
 
-.table-scroll {
+/* Table */
+
+.table-box {
     overflow-x: auto;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 900px;
+    min-width: 950px;
 }
 
 th, td {
-    padding: 12px;
-    border: 1px solid #ddd;
-    text-align: center;
+    padding: 13px 10px;
+    border: 1px solid #e1def0;
+    text-align: left;
+    font-size: 13px;
 }
 
 th {
-    background: #29158e;
-    color: white;
+    background: #e9e6ff;
+    color: #201d50;
+}
+
+td {
+    color: #333;
+}
+
+#count {
+    padding: 15px;
+    color: #555;
+    font-size: 13px;
 }
 
 .edit {
-    background: green;
+    background: #2587e5;
+    padding: 7px 9px;
 }
 
 .delete {
-    background: red;
+    background: #e34242;
+    padding: 7px 9px;
 }
 
-@media (max-width: 600px) {
-    body {
+/* Responsive */
+
+@media(max-width: 800px) {
+
+    .sidebar {
+        width: 170px;
+        padding: 12px;
+    }
+
+    .main {
+        margin-left: 170px;
+        width: calc(100% - 170px);
         padding: 10px;
     }
 
     .form-grid {
         grid-template-columns: 1fr;
+        gap: 10px;
     }
-}
-.sidebar {
-    width: 220px;
-    min-width: 220px;
-    min-height: 100vh;
-    background: linear-gradient(#10194f, #292080);
-    color: white;
-    text-align: center;
-    padding: 30px 15px;
-}
 
-.college-logo {
-    font-size: 65px;
-    margin-bottom: 15px;
-}
+    .buttons {
+        margin-top: 25px;
+    }
 
-.sidebar h2 {
-    font-size: 21px;
-    line-height: 1.4;
-}
+    .details-heading {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
 
-.subtitle {
-    font-size: 13px;
-    font-style: italic;
-    margin-top: 15px;
-}
+    .details-heading input {
+        width: 100%;
+    }
 
-.quote {
-    margin-top: 100px;
-    font-size: 17px;
-    font-style: italic;
-    line-height: 1.8;
-    color: #e0d9ff;
-}
-
-.bottom-text {
-    margin-top: 100px;
-    font-size: 12px;
-    line-height: 2;
-    color: #c9c5ff;
-}
-
-.layout {
-    display: flex;
-    min-height: 100vh;
-}
-
-.main {
-    flex: 1;
-    min-width: 0;
-    padding: 20px;
-}
-
-
-
-
-
-
-
-
-
-
-.college-info {
-    text-align: center;
-    padding: 10px;
-}
-
-.logo {
-    width: 90px;
-    height: 90px;
-    object-fit: contain;
-    background: white;
-    border-radius: 10px;
-}
-
-.college-photo {
-    width: 100%;
-    height: 130px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-top: 10px;
-}
-
-.college-info h2 {
-    font-size: 18px;
-    margin-top: 10px;
-    color: white;
-}
-
-.college-info p {
-    font-size: 13px;
-    margin-top: 8px;
-    color: white;
+    .topbar h2 {
+        font-size: 16px;
+    }
 }

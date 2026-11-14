@@ -1,149 +1,176 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Student Management</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management System</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
 
-    <h2>Student Management System</h2>
+    <!-- Sidebar -->
+    <aside class="sidebar">
 
-    <div class="form-box">
-        <h3>Student Registration</h3>
+        <div class="logo">🎓</div>
 
-        <form id="studentForm">
+        <h2>Paavai Engineering College</h2>
+        <p>Student Management System</p>
 
-            <div class="form-grid">
+        <ul>
+            <li class="active" onclick="goTo('dashboard', this)">⌂ Dashboard</li>
+            <li onclick="goTo('registration', this)">♟ Register Student</li>
+            <li onclick="goTo('studentDetails', this)">♟ View Students</li>
+            <li onclick="goTo('studentDetails', this)">▤ Department</li>
+            <li onclick="alert('Reports')">▣ Reports</li>
+            <li onclick="alert('Settings')">⚙ Settings</li>
+        </ul>
 
-                <div>
-                    <label>Student Name *</label>
-                    <input type="text" id="name" placeholder="Enter student name" required>
+        <div class="logout">↪ Logout</div>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <h2>☰ &nbsp; Student Management System</h2>
+            <span>👤 Admin⌄</span>
+        </header>
+
+        <!-- Dashboard -->
+        <section id="dashboard" class="dashboard">
+
+            <!-- Registration -->
+            <div class="section" id="registration">
+
+                <div class="section-heading">
+                    <h2>♟ Student Registration</h2>
+                    <i>Build Better Tomorrow...</i>
                 </div>
 
-                <div>
-                    <label>Department *</label>
-                    <select id="department" required>
-                        <option value="">Select Department</option>
-                        <option>ECE</option>
-                        <option>CSE</option>
-                        <option>IT</option>
-                        <option>EEE</option>
-                        <option>MECH</option>
-                    </select>
+                <form id="studentForm">
+
+                    <div class="form-grid">
+
+                        <!-- Left Column -->
+                        <div>
+
+                            <label>♟ Student Name *</label>
+                            <input type="text" id="name"
+                                placeholder="Enter student name" required>
+
+                            <label># Register Number *</label>
+                            <input type="text" id="reg"
+                                placeholder="Enter register number" required>
+
+                            <label>✉ Email *</label>
+                            <input type="email" id="email"
+                                placeholder="Enter email address" required>
+
+                            <label>☎ Phone Number *</label>
+                            <input type="tel" id="phone"
+                                placeholder="Enter 10 digit number"
+                                maxlength="10" pattern="[0-9]{10}" required>
+
+                            <label>Gender *</label>
+
+                            <div class="gender">
+                                <label><input type="radio" name="gender" value="Male" required> Male</label>
+                                <label><input type="radio" name="gender" value="Female"> Female</label>
+                                <label><input type="radio" name="gender" value="Others"> Others</label>
+                            </div>
+
+                        </div>
+
+                        <!-- Right Column -->
+                        <div>
+
+                            <label>🏛 Department *</label>
+                            <select id="dept" required>
+                                <option value="">Select Department</option>
+                                <option>ECE</option>
+                                <option>CSE</option>
+                                <option>EEE</option>
+                                <option>IT</option>
+                            </select>
+
+                            <label>▣ Year *</label>
+                            <select id="year" required>
+                                <option value="">Select Year</option>
+                                <option>I Year</option>
+                                <option>II Year</option>
+                                <option>III Year</option>
+                                <option>IV Year</option>
+                            </select>
+
+                            <label>▣ Date of Birth *</label>
+                            <input type="date" id="dob" required>
+
+                            <div class="buttons">
+                                <button type="submit" id="submitBtn">
+                                    ▣ Register Student
+                                </button>
+
+                                <button type="reset" class="clear"
+                                    onclick="clearForm()">
+                                    ⟳ Clear
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- Student Details -->
+            <div class="section" id="studentDetails">
+
+                <div class="section-heading details-heading">
+                    <h2>♟ Student Details</h2>
+
+                    <input type="text" id="search"
+                        placeholder="⌕ Search by Name or Register Number...">
                 </div>
 
-                <div>
-                    <label>Register Number *</label>
-                    <input type="text" id="regno" placeholder="Enter register number" required>
+                <div class="table-box">
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Name</th>
+                                <th>Register No</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Gender</th>
+                                <th>Department</th>
+                                <th>Year</th>
+                                <th>DOB</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="studentList"></tbody>
+                    </table>
+
                 </div>
 
-                <div>
-                    <label>Year *</label>
-                    <select id="year" required>
-                        <option value="">Select Year</option>
-                        <option>I Year</option>
-                        <option>II Year</option>
-                        <option>III Year</option>
-                        <option>IV Year</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label>Email *</label>
-                    <input type="email" id="email" placeholder="Enter email" required>
-                </div>
-
-                <div>
-                    <label>Date of Birth *</label>
-                    <input type="date" id="dob" required>
-                </div>
-
-                <div>
-                    <label>Phone Number *</label>
-                    <input type="tel" id="phone" placeholder="Enter phone number" pattern="[0-9]{10}" required>
-                </div>
-
-                <div>
-                    <label>Status</label>
-                    <select id="status">
-                        <option>Active</option>
-                        <option>Inactive</option>
-                    </select>
-                </div>
+                <p id="count">Showing 0 students</p>
 
             </div>
 
-            <label>Gender *</label>
-            <div class="gender">
-                <label><input type="radio" name="gender" value="Male" required> Male</label>
-                <label><input type="radio" name="gender" value="Female"> Female</label>
-                <label><input type="radio" name="gender" value="Others"> Others</label>
-            </div>
+        </section>
 
-            <button type="submit" id="submitBtn">Register Student</button>
-            <button type="reset" class="clear">Clear</button>
-
-        </form>
-    </div>
-
-    <div class="table-box">
-
-        <h3>Student Details</h3>
-
-        <input type="text" id="search"
-        placeholder="Search by Name or Register Number">
-
-        <div class="table-scroll">
-            <table>
-                <thead>
-                    <tr>
-                        <th>S.No</th>
-                        <th>Name</th>
-                        <th>Register Number</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Gender</th>
-                        <th>Department</th>
-                        <th>Year</th>
-                        <th>DOB</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody id="studentList"></tbody>
-            </table>
-        </div>
-
-    </div>
+    </main>
 
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
-
-
-
-
-<div class="sidebar">
-
-    <div class="college-info">
-
-        <img src="logo.png" class="logo">
-
-        <img src="images.png" class="college-photo">
-
-        <h2>Paavai Engineering College</h2>
-
-        <p>Student Management System</p>
-
-    </div>
-
-    <h3>Dashboard</h3>
-
-</div>
